@@ -1,0 +1,51 @@
+//
+//  FBGameRequestDialogDelegate.m
+//  AirFacebook
+//
+
+#import "FBGameRequestDialogDelegate.h"
+#import "AirFacebook.h"
+
+@implementation FBGameRequestDialogDelegate
+{
+    NSString *callback;
+}
+
+- (id)initWithCallback:(NSString *)aCallback
+{
+    if( self = [super init] )
+    {
+        callback = aCallback;
+    }
+    
+    return self;
+}
+
+- (void)showGameRequestDialogWithContent:(FBSDKGameRequestContent *)content
+{
+    [FBSDKGameRequestDialog showWithContent:content delegate:self];
+}
+
+- (void)gameRequestDialog:(FBSDKGameRequestDialog *)gameRequestDialog didCompleteWithResults:(NSDictionary *)results
+{
+    NSString *resultString = [AirFacebook jsonStringFromObject:results andPrettyPrint:NO];
+    [AirFacebook log:@"GAMEREQUEST_COMPLETE JSON: %@", resultString];
+    [AirFacebook dispatchEvent:[NSString stringWithFormat:@"GAMEREQUEST_SUCCESS_%@", callback] withMessage:resultString];
+    [[AirFacebook sharedInstance] shareFinishedForCallback:callback];
+}
+
+- (void)gameRequestDialog:(FBSDKGameRequestDialog *)gameRequestDialog didFailWithError:(NSError *)error
+{
+    [AirFacebook log:@"GAMEREQUEST_ERROR error: %@", [error description]];
+    [AirFacebook dispatchEvent:[NSString stringWithFormat:@"GAMEREQUEST_ERROR_%@", callback] withMessage:[error description]];
+    [[AirFacebook sharedInstance] shareFinishedForCallback:callback];
+}
+
+- (void)gameRequestDialogDidCancel:(FBSDKGameRequestDialog *)gameRequestDialog
+{
+    [AirFacebook log:@"GAMEREQUEST_CANCEL"];
+    [AirFacebook dispatchEvent:[NSString stringWithFormat:@"GAMEREQUEST_CANCELLED_%@", callback] withMessage:@"OK"];
+    [[AirFacebook sharedInstance] shareFinishedForCallback:callback];
+}
+
+@end

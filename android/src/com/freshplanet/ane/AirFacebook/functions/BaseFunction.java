@@ -40,7 +40,7 @@ public class BaseFunction implements FREFunction
 		}
 	}
 
-	protected List<String> getStringListProperty(FREObject object, String property)
+	protected ArrayList<String> getStringListProperty(FREObject object, String property)
 	{
 		try
 		{
@@ -115,9 +115,9 @@ public class BaseFunction implements FREFunction
 		}
 	}
 	
-	protected List<String> getListOfStringFromFREArray(FREArray array)
+	protected ArrayList<String> getListOfStringFromFREArray(FREArray array)
 	{
-		List<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<String>();
 		
 		try
 		{
