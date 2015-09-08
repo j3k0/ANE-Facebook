@@ -39,6 +39,10 @@ public class AirFacebookExtensionContext extends FREContext
 		functions.put("canPresentAppInviteDialog", new CanPresentAppInviteDialogFunction());
 		functions.put("appInviteDialog", new AppInviteDialogFunction());
 
+		// Game request dialog
+		functions.put("canPresentGameRequestDialog", new CanPresentGameRequestDialogFunction());
+		functions.put("gameRequestDialog", new GameRequestDialogFunction());
+
 		//functions.put("openDeferredAppLink", new OpenDeferredAppLinkFunction());
 
 		// Settings
@@ -55,9 +59,9 @@ public class AirFacebookExtensionContext extends FREContext
 		functions.put("nativeLog", new NativeLogFunction());
 		functions.put("setNativeLogEnabled", new SetNativeLogEnabledFunction());
 
-		return functions;	
+		return functions;
 	}
-	
+
 	private String appID;
 	private DefaultAudience defaultAudience = DefaultAudience.FRIENDS;
 	private ShareDialog.Mode defaultShareDialogMode = ShareDialog.Mode.AUTOMATIC;

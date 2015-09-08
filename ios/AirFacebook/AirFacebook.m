@@ -21,6 +21,7 @@
 #import "FREConversionUtil.h"
 #import "FBShareDelegate.h"
 #import "FBAppInviteDialogDelegate.h"
+#import "FBGameRequestDialogDelegate.h"
 
 FREContext AirFBCtx = nil;
 
@@ -131,6 +132,17 @@ static AirFacebook *sharedInstance = nil;
         FBAppInviteDialogDelegate *delegate = [[FBAppInviteDialogDelegate alloc] initWithCallback:callback];
         [shareActivities setObject:delegate forKey:callback];
         [delegate showAppInviteDialogWithContent:content];
+    }
+}
+
+- (void)showGameRequestDialogWithContent:(FBSDKGameRequestContent *)content andCallback:(NSString *)callback
+{
+    [AirFacebook log:@"showGameRequestDialog:withCallback: callback: %@", callback];
+
+    if(callback != nil){
+        FBGameRequestDialogDelegate *delegate = [[FBGameRequestDialogDelegate alloc] initWithCallback:callback];
+        [shareActivities setObject:delegate forKey:callback];
+        [delegate showGameRequestDialogWithContent:content];
     }
 }
 
@@ -444,6 +456,55 @@ DEFINE_ANE_FUNCTION(appInviteDialog)
     return nil;
 }
 
+FBSDKGameRequestActionType actionTypeFromString(NSString *actionType) {
+    if ([actionType isEqualToString:@"SEND"]) {
+        return FBSDKGameRequestActionTypeSend;
+    } else if ([actionType isEqualToString:@"ASKFOR"]) {
+        return FBSDKGameRequestActionTypeAskFor;
+    } else if ([actionType isEqualToString:@"TURN"]) {
+        return FBSDKGameRequestActionTypeTurn;
+    }
+    return FBSDKGameRequestActionTypeNone;
+}
+
+FBSDKGameRequestFilter filterFromString(NSString *filter) {
+    if ([filter isEqualToString:@"APP_USERS"]) {
+        return FBSDKGameRequestFilterAppUsers;
+    } else if ([filter isEqualToString:@"APP_NON_USERS"]) {
+        return FBSDKGameRequestFilterAppNonUsers;
+    }
+    return FBSDKGameRequestFilterNone;
+}
+
+DEFINE_ANE_FUNCTION(gameRequestDialog)
+{
+    NSString *message = [FREConversionUtil toString:[FREConversionUtil getProperty:@"message" fromObject:argv[0]]];
+    NSArray *to = [FREConversionUtil toStringArray:[FREConversionUtil getProperty:@"to" fromObject:argv[0]]];
+    NSString *data = [FREConversionUtil toString:[FREConversionUtil getProperty:@"data" fromObject:argv[0]]];
+    NSString *title = [FREConversionUtil toString:[FREConversionUtil getProperty:@"title" fromObject:argv[0]]];
+    NSString *actionType = [FREConversionUtil toString:[FREConversionUtil getProperty:@"actionType" fromObject:argv[0]]];
+    NSString *objectId = [FREConversionUtil toString:[FREConversionUtil getProperty:@"objectId" fromObject:argv[0]]];
+    NSString *filters = [FREConversionUtil toString:[FREConversionUtil getProperty:@"filters" fromObject:argv[0]]];
+    NSArray *suggestions = [FREConversionUtil toStringArray:[FREConversionUtil getProperty:@"suggestions" fromObject:argv[0]]];
+
+    NSString *callback = FPANE_FREObjectToNSString(argv[1]);
+
+    FBSDKGameRequestContent *content = [[FBSDKGameRequestContent alloc] init];
+
+    if(message != nil) content.message = message;
+    if(to != nil) content.recipients = to;
+    if(data != nil) content.data = data;
+    if(title != nil) content.title = title;
+    if(actionType != nil) content.actionType = actionTypeFromString(actionType);
+    if(objectId != nil) content.objectID = objectId;
+    if(filters != nil) content.filters = filterFromString(filters);
+    if(suggestions != nil) content.recipientSuggestions = suggestions;
+
+    [[AirFacebook sharedInstance] showGameRequestDialogWithContent:content andCallback:callback];
+
+    return nil;
+}
+
 DEFINE_ANE_FUNCTION(activateApp)
 {
     [FBSDKAppEvents activateApp];
@@ -487,7 +548,8 @@ void AirFacebookContextInitializer(void* extData, const uint8_t* ctxType, FRECon
         @"canPresentShareDialog":           [NSValue valueWithPointer:&canPresentShareDialog],
         @"shareLinkDialog":                 [NSValue valueWithPointer:&shareLinkDialog],
         @"appInviteDialog":                 [NSValue valueWithPointer:&appInviteDialog],
-        
+        @"gameRequestDialog":               [NSValue valueWithPointer:&gameRequestDialog],
+
         // FB events
         @"activateApp":                     [NSValue valueWithPointer:&activateApp],
         @"logEvent":                        [NSValue valueWithPointer:&logEvent],
