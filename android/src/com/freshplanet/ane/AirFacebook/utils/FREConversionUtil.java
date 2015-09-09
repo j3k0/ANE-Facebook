@@ -152,6 +152,143 @@ public class FREConversionUtil {
         return result;
     }
 
+    public static <T> List<T> toList(Class<T> type, FREArray array){
+        List<T> result = new ArrayList<>();
+
+        try
+        {
+            for (Integer i = 0; i < array.getLength(); i++)
+            {
+                FREObject object = array.getObjectAt(i);
+
+                if(String.class.isAssignableFrom(type)){
+                    result.add((T)object.getAsString());
+                }else if(Integer.class.isAssignableFrom(type)){
+                    result.add((T)(Integer)object.getAsInt());
+                }else if(Boolean.class.isAssignableFrom(type)){
+                    result.add((T)(Boolean)object.getAsBool());
+                }else if(Double.class.isAssignableFrom(type)){
+                    result.add((T)(Double)object.getAsDouble());
+                }else if(Long.class.isAssignableFrom(type)){
+                    result.add((T)(Long)((Double)object.getAsDouble()).longValue());
+                }else{
+                    return null;
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static List<Integer> toIntegerArray(FREArray array){
+        List<Integer> result = new ArrayList<>();
+
+        try
+        {
+            for (Integer i = 0; i < array.getLength(); i++)
+            {
+                try
+                {
+                    result.add(FREConversionUtil.toInt(array.getObjectAt(i)));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static List<Boolean> toBoolArray(FREArray array){
+        List<Boolean> result = new ArrayList<>();
+
+        try
+        {
+            for (Integer i = 0; i < array.getLength(); i++)
+            {
+                try
+                {
+                    result.add(FREConversionUtil.toBoolean(array.getObjectAt(i)));
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static List<Double> toDoubleArray(FREArray array){
+        List<Double> result = new ArrayList<>();
+
+        try
+        {
+            for (Integer i = 0; i < array.getLength(); i++)
+            {
+                try
+                {
+                    result.add(FREConversionUtil.toNumber(array.getObjectAt(i)).doubleValue());
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static List<Long> toLongArray(FREArray array){
+        List<Long> result = new ArrayList<>();
+
+        try
+        {
+            for (Integer i = 0; i < array.getLength(); i++)
+            {
+                try
+                {
+                    result.add(FREConversionUtil.toNumber(array.getObjectAt(i)).longValue());
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
     public static FREObject getProperty(String name, FREObject object){
         try
         {
