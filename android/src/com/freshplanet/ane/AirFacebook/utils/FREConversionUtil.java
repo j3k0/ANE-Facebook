@@ -126,8 +126,8 @@ public class FREConversionUtil {
         }
     }
 
-    public static List<String> toStringArray(FREArray array){
-        List<String> result = new ArrayList<>();
+    public static ArrayList<String> toStringArray(FREArray array){
+        ArrayList<String> result = new ArrayList<>();
 
         try
         {

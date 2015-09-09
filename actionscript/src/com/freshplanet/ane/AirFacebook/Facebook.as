@@ -1,6 +1,7 @@
 ﻿package com.freshplanet.ane.AirFacebook {
 import com.freshplanet.ane.AirFacebook.appevents.FBEvent;
 import com.freshplanet.ane.AirFacebook.share.FBAppInviteContent;
+import com.freshplanet.ane.AirFacebook.share.FBGameRequestContent;
 import com.freshplanet.ane.AirFacebook.share.FBShareLinkContent;
 
 import flash.desktop.InvokeEventReason;
@@ -402,6 +403,25 @@ public class Facebook extends EventDispatcher {
         }
     }
 
+    /**
+     * Opens game request dialog.
+     *
+     * @param gameRequestContent Content of game request dialog.
+     */
+    public function gameRequestDialog(gameRequestContent:FBGameRequestContent, callback:Function = null):void
+    {
+        if (_initialized) {
+
+            if(gameRequestContent == null){
+                return;
+            }
+            _context.call("gameRequestDialog", gameRequestContent, getNewCallbackName(callback));
+        } else {
+
+            log("You must call init() before any other method!");
+        }
+    }
+
     public function logEvent(event:FBEvent):void
     {
         if(_initialized){
@@ -496,6 +516,7 @@ public class Facebook extends EventDispatcher {
         var dataArr:Array;
         var callbackName:String;
         var callback:Function;
+        var status:String;
 
         if (event.code.indexOf("SESSION") != -1) // If the event code contains SESSION, it's an open/reauthorize session result
         {
@@ -517,7 +538,24 @@ public class Facebook extends EventDispatcher {
         else if (event.code.indexOf("SHARE") != -1) {
             dataArr = event.code.split("_");
             if (dataArr.length == 3) {
-                var status:String = dataArr[1];
+                status = dataArr[1];
+                callbackName = dataArr[2];
+
+                callback = _requestCallbacks[callbackName];
+
+                if (callback != null) {
+
+                    callback(status == "SUCCESS", status == "CANCELLED", status == "ERROR" ? event.level : null);
+
+                    // TODO we should delete also null values from callback array
+                    delete _requestCallbacks[callbackName];
+                }
+            }
+        }
+        else if (event.code.indexOf("GAMEREQUEST") != -1) {
+            dataArr = event.code.split("_");
+            if (dataArr.length == 3) {
+                status = dataArr[1];
                 callbackName = dataArr[2];
 
                 callback = _requestCallbacks[callbackName];
