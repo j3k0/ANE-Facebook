@@ -34,6 +34,7 @@ public class AirFacebookExtensionContext extends FREContext
 		// Sharing dialogs
 		functions.put("canPresentShareDialog", new CanPresentShareDialogFunction());
 		functions.put("shareLinkDialog", new ShareLinkDialogFunction());
+		functions.put("share", new ShareOpenGraphFunction());
 
 		// Invite dialog
 		functions.put("canPresentAppInviteDialog", new CanPresentAppInviteDialogFunction());

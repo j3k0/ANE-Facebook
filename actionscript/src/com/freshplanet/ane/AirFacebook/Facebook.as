@@ -2,6 +2,7 @@
 import com.freshplanet.ane.AirFacebook.appevents.FBEvent;
 import com.freshplanet.ane.AirFacebook.share.FBAppInviteContent;
 import com.freshplanet.ane.AirFacebook.share.FBShareLinkContent;
+import com.freshplanet.ane.AirFacebook.share.FBShareOpenGraphContent;
 
 import flash.desktop.InvokeEventReason;
 
@@ -410,6 +411,11 @@ public class Facebook extends EventDispatcher {
 
             log("You must call init() before any other method!");
         }
+    }
+
+    public function share(content:FBShareOpenGraphContent):void
+    {
+        _context.call("share", content);
     }
 
     // --------------------------------------------------------------------------------------//
