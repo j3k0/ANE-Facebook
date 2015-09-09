@@ -16,7 +16,7 @@ import flash.system.Capabilities;
 
 public class Facebook extends EventDispatcher {
 
-    public static const VERSION:String = "4.5.2";
+    public static const VERSION:String = "4.5.3";
 
     private var _initialized:Boolean;
 
@@ -53,11 +53,6 @@ public class Facebook extends EventDispatcher {
                 log("ERROR - Extension context is null. Please check if extension.xml is setup correctly.");
                 return;
             }
-            _context.addEventListener(StatusEvent.STATUS, onStatus);
-
-            NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
-            NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
-            NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
 
             _instance = this;
         }
@@ -107,10 +102,16 @@ public class Facebook extends EventDispatcher {
     {
         if (isSupported && _context != null) {
 
-            _context.call("setNativeLogEnabled", Facebook.nativeLogEnabled);
-            log("ANE Facebook version: " + VERSION);
-            // iOS is synchronous but we will simulate async to have consistent API
-            _context.call("initFacebook", appID, getNewCallbackName(onInitialized));
+            if(!_initialized){
+                _context.addEventListener(StatusEvent.STATUS, onStatus);
+
+                _context.call("setNativeLogEnabled", Facebook.nativeLogEnabled);
+                log("ANE Facebook version: " + VERSION);
+                // iOS is synchronous but we will simulate async to have consistent API
+                _context.call("initFacebook", appID, getNewCallbackName(onInitialized));
+            } else {
+                log("Already initialized!");
+            }
         } else {
 
             log("Can't initialize extension! Unsupported platform or context couldn't be created!")
@@ -573,6 +574,10 @@ public class Facebook extends EventDispatcher {
             log("Facebook SDK initialized.");
 
             _initialized = true;
+
+            NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
+            NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
+            NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
 
             dataArr = event.code.split("_");
             if (dataArr.length == 2) {
