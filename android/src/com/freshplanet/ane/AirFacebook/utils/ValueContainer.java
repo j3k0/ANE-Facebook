@@ -1,10 +1,6 @@
 package com.freshplanet.ane.AirFacebook.utils;
 
-import android.text.TextUtils;
 import com.adobe.fre.*;
-import com.facebook.share.model.ShareOpenGraphAction;
-import com.facebook.share.model.ShareOpenGraphObject;
-import com.facebook.share.model.ShareOpenGraphValueContainer;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 
 import java.util.ArrayList;
@@ -90,108 +86,6 @@ public class ValueContainer {
         return builder.toString();
     }
 
-    public ShareOpenGraphAction toOpenGraphAction()
-    {
-        ShareOpenGraphAction.Builder builder = new ShareOpenGraphAction.Builder();
-        addValuesToBuilder(builder);
-        return builder.build();
-    }
-
-    private ShareOpenGraphObject toOpenGraphObject()
-    {
-        ShareOpenGraphObject.Builder builder = new ShareOpenGraphObject.Builder();
-        addValuesToBuilder(builder);
-        return builder.build();
-    }
-
-    private <T extends ShareOpenGraphValueContainer.Builder> void addValuesToBuilder(T builder)
-    {
-        for(int i = 0; i<keys.size(); i++){
-
-            String key = keys.get(i);
-            ConversionType type = types.get(i);
-            switch (type){
-                case STRING:
-                    builder.putString(key, (String)values.get(i));
-                    break;
-                case INT:
-                    builder.putInt(key, (Integer) values.get(i));
-                    break;
-                case BOOL:
-                    builder.putBoolean(key, (Boolean) values.get(i));
-                    break;
-                case DOUBLE:
-                    builder.putDouble(key, (Double) values.get(i));
-                    break;
-                case LONG:
-                    builder.putLong(key, (Long) values.get(i));
-                    break;
-                case STRING_ARRAY:
-                    builder.putStringArrayList(key, (ArrayList<String>) values.get(i));
-                    break;
-                case INT_ARRAY:
-                {
-                    List<Integer> list = (List<Integer>)values.get(i);
-                    int[] primitiveList = new int[list.size()];
-                    for(int j = 0; j<list.size(); j++){
-                        primitiveList[j] = list.get(j);
-                    }
-                    builder.putIntArray(key, primitiveList);
-                }
-                break;
-                case BOOL_ARRAY:
-                {
-                    List<Boolean> list = (List<Boolean>) values.get(i);
-                    boolean[] primitiveList = new boolean[list.size()];
-                    for (int j = 0; j < list.size(); j++) {
-                        primitiveList[j] = list.get(j);
-                    }
-                    builder.putBooleanArray(key, primitiveList);
-                }
-                break;
-                case DOUBLE_ARRAY:
-                {
-                    List<Double> list = (List<Double>) values.get(i);
-                    double[] primitiveList = new double[list.size()];
-                    for (int j = 0; j < list.size(); j++) {
-                        primitiveList[j] = list.get(j);
-                    }
-                    builder.putDoubleArray(key, primitiveList);
-                }
-                break;
-                case LONG_ARRAY:
-                {
-                    List<Long> list = (List<Long>) values.get(i);
-                    long[] primitiveList = new long[list.size()];
-                    for (int j = 0; j < list.size(); j++) {
-                        primitiveList[j] = list.get(j);
-                    }
-                    builder.putLongArray(key, primitiveList);
-                }
-                break;
-                case OBJECT:
-                {
-                    ValueContainer valueContainer = (ValueContainer) values.get(i);
-                    builder.putObject(key, valueContainer.toOpenGraphObject());
-                }
-                break;
-                case OBJECT_ARRAY:
-                {
-                    ArrayList<ShareOpenGraphObject> newList = new ArrayList<>();
-                    List<ValueContainer> list = (List<ValueContainer>) values.get(i);
-                    for(int j = 0; j<list.size(); j++){
-                        ValueContainer valueContainer = list.get(j);
-                        newList.add(valueContainer.toOpenGraphObject());
-                    }
-                    builder.putObjectArrayList(key, newList);
-                }
-                break;
-                default:
-                    continue;
-            }
-        }
-    }
-
     public static List<ValueContainer> toValueObjectArray(FREArray array){
         List<ValueContainer> result = new ArrayList<>();
 
@@ -240,8 +134,8 @@ public class ValueContainer {
             for (long i = 0; i < length; i++) {
                 try {
                     String key = FREConversionUtil.toString(keys.getObjectAt(i));
-                    int type = FREConversionUtil.toInt(types.getObjectAt(i));
-                    ConversionType conversionType = ConversionType.fromValue(type);
+                    int valueType = FREConversionUtil.toInt(types.getObjectAt(i));
+                    ConversionType conversionType = ConversionType.fromValue(valueType);
 
                     FREObject valueObject = values.getObjectAt(i);
                     result.addValue(key, conversionType, valueObject);

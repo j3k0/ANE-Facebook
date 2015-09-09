@@ -38,7 +38,7 @@ public class FacebookObjectsConversionUtil {
         AirFacebookExtension.log("VALUECONTAINER " + valueContainer.toString());
 
         if(previewPropertyName != null) builder.setPreviewPropertyName(previewPropertyName);
-        if(valueContainer != null) builder.setAction(valueContainer.toOpenGraphAction());
+        if(valueContainer != null) builder.setAction(FacebookValueContainerBuilder.toOpenGraphAction(valueContainer));
     }
 
     public static void parseShareLinkContent(FREObject object, ShareLinkContent.Builder builder)
