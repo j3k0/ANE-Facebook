@@ -1,6 +1,7 @@
 ﻿package com.freshplanet.ane.AirFacebook {
 import com.freshplanet.ane.AirFacebook.appevents.FBEvent;
 import com.freshplanet.ane.AirFacebook.share.FBAppInviteContent;
+import com.freshplanet.ane.AirFacebook.share.FBGameRequestContent;
 import com.freshplanet.ane.AirFacebook.share.FBShareLinkContent;
 import com.freshplanet.ane.AirFacebook.share.FBShareOpenGraphContent;
 
@@ -16,7 +17,7 @@ import flash.system.Capabilities;
 
 public class Facebook extends EventDispatcher {
 
-    public static const VERSION:String = "4.5.2";
+    public static const VERSION:String = "4.5.3";
 
     private var _initialized:Boolean;
 
@@ -53,11 +54,6 @@ public class Facebook extends EventDispatcher {
                 log("ERROR - Extension context is null. Please check if extension.xml is setup correctly.");
                 return;
             }
-            _context.addEventListener(StatusEvent.STATUS, onStatus);
-
-            NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
-            NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
-            NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
 
             _instance = this;
         }
@@ -107,10 +103,16 @@ public class Facebook extends EventDispatcher {
     {
         if (isSupported && _context != null) {
 
-            _context.call("setNativeLogEnabled", Facebook.nativeLogEnabled);
-            log("ANE Facebook version: " + VERSION);
-            // iOS is synchronous but we will simulate async to have consistent API
-            _context.call("initFacebook", appID, getNewCallbackName(onInitialized));
+            if(!_initialized){
+                _context.addEventListener(StatusEvent.STATUS, onStatus);
+
+                _context.call("setNativeLogEnabled", Facebook.nativeLogEnabled);
+                log("ANE Facebook version: " + VERSION);
+                // iOS is synchronous but we will simulate async to have consistent API
+                _context.call("initFacebook", appID, getNewCallbackName(onInitialized));
+            } else {
+                log("Already initialized!");
+            }
         } else {
 
             log("Can't initialize extension! Unsupported platform or context couldn't be created!")
@@ -402,6 +404,25 @@ public class Facebook extends EventDispatcher {
         }
     }
 
+    /**
+     * Opens game request dialog.
+     *
+     * @param gameRequestContent Content of game request dialog.
+     */
+    public function gameRequestDialog(gameRequestContent:FBGameRequestContent, callback:Function = null):void
+    {
+        if (_initialized) {
+
+            if(gameRequestContent == null){
+                return;
+            }
+            _context.call("gameRequestDialog", gameRequestContent, getNewCallbackName(callback));
+        } else {
+
+            log("You must call init() before any other method!");
+        }
+    }
+
     public function logEvent(event:FBEvent):void
     {
         if(_initialized){
@@ -501,6 +522,7 @@ public class Facebook extends EventDispatcher {
         var dataArr:Array;
         var callbackName:String;
         var callback:Function;
+        var status:String;
 
         if (event.code.indexOf("SESSION") != -1) // If the event code contains SESSION, it's an open/reauthorize session result
         {
@@ -522,7 +544,24 @@ public class Facebook extends EventDispatcher {
         else if (event.code.indexOf("SHARE") != -1) {
             dataArr = event.code.split("_");
             if (dataArr.length == 3) {
-                var status:String = dataArr[1];
+                status = dataArr[1];
+                callbackName = dataArr[2];
+
+                callback = _requestCallbacks[callbackName];
+
+                if (callback != null) {
+
+                    callback(status == "SUCCESS", status == "CANCELLED", status == "ERROR" ? event.level : null);
+
+                    // TODO we should delete also null values from callback array
+                    delete _requestCallbacks[callbackName];
+                }
+            }
+        }
+        else if (event.code.indexOf("GAMEREQUEST") != -1) {
+            dataArr = event.code.split("_");
+            if (dataArr.length == 3) {
+                status = dataArr[1];
                 callbackName = dataArr[2];
 
                 callback = _requestCallbacks[callbackName];
@@ -541,6 +580,10 @@ public class Facebook extends EventDispatcher {
             log("Facebook SDK initialized.");
 
             _initialized = true;
+
+            NativeApplication.nativeApplication.addEventListener(InvokeEvent.INVOKE, onInvoke);
+            NativeApplication.nativeApplication.addEventListener(Event.ACTIVATE, onActivate);
+            NativeApplication.nativeApplication.addEventListener(Event.DEACTIVATE, onDeactivate);
 
             dataArr = event.code.split("_");
             if (dataArr.length == 2) {
