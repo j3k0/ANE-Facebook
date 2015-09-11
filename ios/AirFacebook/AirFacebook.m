@@ -440,6 +440,41 @@ DEFINE_ANE_FUNCTION(shareLinkDialog)
     return nil;
 }
 
+DEFINE_ANE_FUNCTION(shareOpenGraph)
+{
+    NSString *contentUrl = [FREConversionUtil toString:[FREConversionUtil getProperty:@"contentUrl" fromObject:argv[0]]];
+    NSArray *peopleIds = [FREConversionUtil toStringArray:[FREConversionUtil getProperty:@"peopleIds" fromObject:argv[0]]];
+    NSString *placeId = [FREConversionUtil toString:[FREConversionUtil getProperty:@"placeId" fromObject:argv[0]]];
+    NSString *ref = [FREConversionUtil toString:[FREConversionUtil getProperty:@"ref" fromObject:argv[0]]];
+    
+    NSString *previewPropertyName = [FREConversionUtil toString:[FREConversionUtil getProperty:@"previewPropertyName" fromObject:argv[0]]];
+    
+    BOOL useShareApi = FPANE_FREObjectToBOOL(argv[1]);
+    NSString *callback = FPANE_FREObjectToNSString(argv[2]);
+    
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    //[dict setObject:<#(id)#> forKey:<#(id<NSCopying>)#>]
+    
+    //FBSDKShareOpenGraphObject *object = [FBSDKShareOpenGraphObject objectWithProperties:(NSDictionary *)];
+    
+    FBSDKShareOpenGraphAction *action = [[FBSDKShareOpenGraphAction alloc] init];
+    action.actionType = @"xx";
+    
+    
+    FBSDKShareOpenGraphContent *content = [[FBSDKShareOpenGraphContent alloc] init];
+    if(contentUrl != nil) content.contentURL = [NSURL URLWithString:contentUrl];
+    if(peopleIds != nil) content.peopleIDs = peopleIds;
+    if(placeId != nil) content.placeID = placeId;
+    if(ref != nil) content.ref = ref;
+    
+    if(previewPropertyName != nil) content.previewPropertyName = previewPropertyName;
+    
+    
+    [[AirFacebook sharedInstance] shareContent:content usingShareApi:useShareApi andCallback:callback];
+    
+    return nil;
+}
+
 DEFINE_ANE_FUNCTION(appInviteDialog)
 {
     NSString *appLinkUrl = [FREConversionUtil toString:[FREConversionUtil getProperty:@"appLinkUrl" fromObject:argv[0]]];

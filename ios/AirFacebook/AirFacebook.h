@@ -60,6 +60,7 @@ DEFINE_ANE_FUNCTION(setDefaultShareDialogMode);
 
 // Sharing dialogs
 DEFINE_ANE_FUNCTION(canPresentShareDialog);
+DEFINE_ANE_FUNCTION(shareOpenGraph);
 DEFINE_ANE_FUNCTION(shareLinkDialog);
 DEFINE_ANE_FUNCTION(appInviteDialog);
 DEFINE_ANE_FUNCTION(gameRequestDialog);
