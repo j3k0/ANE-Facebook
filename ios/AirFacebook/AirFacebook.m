@@ -456,35 +456,28 @@ DEFINE_ANE_FUNCTION(appInviteDialog)
     return nil;
 }
 
-FBSDKGameRequestActionType actionTypeFromString(NSString *actionType) {
-    if ([actionType isEqualToString:@"SEND"]) {
-        return FBSDKGameRequestActionTypeSend;
-    } else if ([actionType isEqualToString:@"ASKFOR"]) {
-        return FBSDKGameRequestActionTypeAskFor;
-    } else if ([actionType isEqualToString:@"TURN"]) {
-        return FBSDKGameRequestActionTypeTurn;
-    }
-    return FBSDKGameRequestActionTypeNone;
-}
-
-FBSDKGameRequestFilter filterFromString(NSString *filter) {
-    if ([filter isEqualToString:@"APP_USERS"]) {
-        return FBSDKGameRequestFilterAppUsers;
-    } else if ([filter isEqualToString:@"APP_NON_USERS"]) {
-        return FBSDKGameRequestFilterAppNonUsers;
-    }
-    return FBSDKGameRequestFilterNone;
-}
-
 DEFINE_ANE_FUNCTION(gameRequestDialog)
 {
     NSString *message = [FREConversionUtil toString:[FREConversionUtil getProperty:@"message" fromObject:argv[0]]];
     NSArray *to = [FREConversionUtil toStringArray:[FREConversionUtil getProperty:@"to" fromObject:argv[0]]];
     NSString *data = [FREConversionUtil toString:[FREConversionUtil getProperty:@"data" fromObject:argv[0]]];
     NSString *title = [FREConversionUtil toString:[FREConversionUtil getProperty:@"title" fromObject:argv[0]]];
-    NSString *actionType = [FREConversionUtil toString:[FREConversionUtil getProperty:@"actionType" fromObject:argv[0]]];
+    
+    FBSDKGameRequestActionType actionType = 0;
+    FREObject actionTypeObject = [FREConversionUtil getProperty:@"actionType" fromObject:argv[0]];
+    if(actionTypeObject != nil){
+        
+        actionType = [FREConversionUtil toUInt:[FREConversionUtil getProperty:@"value" fromObject:actionTypeObject]];
+    }
     NSString *objectId = [FREConversionUtil toString:[FREConversionUtil getProperty:@"objectId" fromObject:argv[0]]];
-    NSString *filters = [FREConversionUtil toString:[FREConversionUtil getProperty:@"filters" fromObject:argv[0]]];
+    
+    FBSDKGameRequestFilter filters = 0;
+    FREObject filtersObject = [FREConversionUtil getProperty:@"filters" fromObject:argv[0]];
+    if(filtersObject != nil){
+        
+        filters = [FREConversionUtil toUInt:[FREConversionUtil getProperty:@"value" fromObject:filtersObject]];
+    }
+
     NSArray *suggestions = [FREConversionUtil toStringArray:[FREConversionUtil getProperty:@"suggestions" fromObject:argv[0]]];
 
     NSString *callback = FPANE_FREObjectToNSString(argv[1]);
@@ -495,9 +488,9 @@ DEFINE_ANE_FUNCTION(gameRequestDialog)
     if(to != nil) content.recipients = to;
     if(data != nil) content.data = data;
     if(title != nil) content.title = title;
-    if(actionType != nil) content.actionType = actionTypeFromString(actionType);
+    content.actionType = actionType;
     if(objectId != nil) content.objectID = objectId;
-    if(filters != nil) content.filters = filterFromString(filters);
+    content.filters = filters;
     if(suggestions != nil) content.recipientSuggestions = suggestions;
 
     [[AirFacebook sharedInstance] showGameRequestDialogWithContent:content andCallback:callback];
