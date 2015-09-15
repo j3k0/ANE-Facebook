@@ -26,8 +26,9 @@
 
 - (void)showAppInviteDialogWithContent:(FBSDKAppInviteContent *)content
 {
-    [FBSDKAppInviteDialog showWithContent:content
-                                 delegate:self];
+    [FBSDKAppInviteDialog showFromViewController:nil
+                                     withContent:content
+                                        delegate:self];
 }
 
 - (void)appInviteDialog:(FBSDKAppInviteDialog *)appInviteDialog didCompleteWithResults:(NSDictionary *)results

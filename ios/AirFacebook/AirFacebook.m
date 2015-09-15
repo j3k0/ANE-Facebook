@@ -202,9 +202,9 @@ DEFINE_ANE_FUNCTION(logInWithPermissions)
     loginManager.loginBehavior = [[AirFacebook sharedInstance] loginBehavior];
     loginManager.defaultAudience = [[AirFacebook sharedInstance] defaultAudience];
     if([type isEqualToString:@"read"]){
-        [loginManager logInWithReadPermissions:permissions handler: [AirFacebook openSessionCompletionHandler]];
+        [loginManager logInWithReadPermissions:permissions fromViewController:nil handler: [AirFacebook openSessionCompletionHandler]];
     }else{
-        [loginManager logInWithPublishPermissions:permissions handler: [AirFacebook openSessionCompletionHandler]];
+        [loginManager logInWithPublishPermissions:permissions fromViewController:nil handler: [AirFacebook openSessionCompletionHandler]];
     }
     
     return nil;
@@ -518,6 +518,8 @@ DEFINE_ANE_FUNCTION(logEvent)
     NSDictionary *parameters = FPANE_FREObjectsToNSDictionary([FREConversionUtil getProperty:@"paramsKeys" fromObject:argv[0]],
                                                               [FREConversionUtil getProperty:@"paramsTypes" fromObject:argv[0]],
                                                               [FREConversionUtil getProperty:@"paramsValues" fromObject:argv[0]]);
+ 
+    [AirFacebook log:@"logEvent name:%@", eventName];
     
     [FBSDKAppEvents logEvent:eventName valueToSum:[valueToSum doubleValue] parameters:parameters];
     return nil;
