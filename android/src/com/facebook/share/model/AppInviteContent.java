@@ -72,7 +72,7 @@ public final class AppInviteContent implements ShareModel {
             public AppInviteContent[] newArray(final int size) {
                 return new AppInviteContent[size];
             }
-    };
+        };
 
     /**
      * Builder class for a concrete instance of AppInviteContent
