@@ -1,5 +1,8 @@
 package com.freshplanet.ane.AirFacebook.share {
 
+/**
+ * @see http://developers.facebook.com/docs/reference/android/current/class/GameRequestContent.Filters/
+ */
     public class FBGameRequestFilter {
 
         public static const NONE:FBGameRequestFilter = new FBGameRequestFilter(Private, "NONE", 0);
