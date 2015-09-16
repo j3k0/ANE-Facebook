@@ -1,5 +1,8 @@
 package com.freshplanet.ane.AirFacebook.share {
 
+/**
+ * @see http://developers.facebook.com/docs/reference/android/current/class/GameRequestContent.ActionType/
+ */
     public class FBGameRequestActionType {
 
         public static const NONE:FBGameRequestActionType = new FBGameRequestActionType(Private, "NONE", 0);
