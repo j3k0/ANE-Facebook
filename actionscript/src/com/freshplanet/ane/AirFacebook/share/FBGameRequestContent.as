@@ -11,9 +11,9 @@ public class FBGameRequestContent {
     public var to:Array;
     public var data:String;
     public var title:String;
-    public var actionType:String;
+    public var actionType:FBGameRequestActionType;
     public var objectId:String;
-    public var filters:String;
+    public var filters:FBGameRequestFilter;
     public var suggestions:Array;
 
     public function FBGameRequestContent() {}

@@ -16,7 +16,7 @@ import flash.system.Capabilities;
 
 public class Facebook extends EventDispatcher {
 
-    public static const VERSION:String = "4.5.3";
+    public static const VERSION:String = "4.6.0";
 
     private var _initialized:Boolean;
 
@@ -407,6 +407,7 @@ public class Facebook extends EventDispatcher {
      * Opens game request dialog.
      *
      * @param gameRequestContent Content of game request dialog.
+     * @param callback (TODO)
      */
     public function gameRequestDialog(gameRequestContent:FBGameRequestContent, callback:Function = null):void
     {
@@ -542,13 +543,26 @@ public class Facebook extends EventDispatcher {
                 callbackName = dataArr[2];
 
                 callback = _requestCallbacks[callbackName];
+                delete _requestCallbacks[callbackName];
 
                 if (callback != null) {
 
                     callback(status == "SUCCESS", status == "CANCELLED", status == "ERROR" ? event.level : null);
+                }
+            }
+        }
+        else if (event.code.indexOf("APPINVITE") != -1) {
+            dataArr = event.code.split("_");
+            if (dataArr.length == 3) {
+                status = dataArr[1];
+                callbackName = dataArr[2];
 
-                    // TODO we should delete also null values from callback array
-                    delete _requestCallbacks[callbackName];
+                callback = _requestCallbacks[callbackName];
+                delete _requestCallbacks[callbackName];
+
+                if (callback != null) {
+
+                    callback(status == "SUCCESS", status == "CANCELLED", status == "ERROR" ? event.level : null);
                 }
             }
         }
@@ -559,13 +573,11 @@ public class Facebook extends EventDispatcher {
                 callbackName = dataArr[2];
 
                 callback = _requestCallbacks[callbackName];
+                delete _requestCallbacks[callbackName];
 
                 if (callback != null) {
 
                     callback(status == "SUCCESS", status == "CANCELLED", status == "ERROR" ? event.level : null);
-
-                    // TODO we should delete also null values from callback array
-                    delete _requestCallbacks[callbackName];
                 }
             }
         }
@@ -584,13 +596,11 @@ public class Facebook extends EventDispatcher {
                 callbackName = dataArr[1];
 
                 callback = _requestCallbacks[callbackName];
+                delete _requestCallbacks[callbackName];
 
                 if(callback != null){
 
                     callback();
-
-                    // TODO we should delete also null values from callback array
-                    delete _requestCallbacks[callbackName];
                 }
             }
         }

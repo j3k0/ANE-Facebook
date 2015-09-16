@@ -19,8 +19,6 @@
 #import <Foundation/Foundation.h>
 #import "FlashRuntimeExtensions.h"
 
-#define DEFINE_ANE_FUNCTION(fn) FREObject fn(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
-
 #define ROOT_VIEW_CONTROLLER [[[UIApplication sharedApplication] keyWindow] rootViewController]
 
 void FPANE_DispatchEvent(FREContext context, NSString *eventName);
