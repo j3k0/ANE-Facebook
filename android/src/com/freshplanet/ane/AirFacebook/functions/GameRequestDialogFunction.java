@@ -54,14 +54,14 @@ public class GameRequestDialogFunction extends BaseFunction implements FREFuncti
 		String callback = getStringFromFREObject(args[1]);
 
 		AirFacebookExtension.log("GameRequestDialogFunction"
-			+ " message:" + message
-			+ " to:" + to
-			+ " data:" + data
-			+ " title:" + title
-			+ " actionType:" + actionType
-			+ " objectId:" + objectId
-			+ " filters:" + filters
-			+ " suggestions:" + suggestions
+			+ " message:'" + message + "'"
+			+ " to:'" + to + "'"
+			+ " data:'" + data + "'"
+			+ " title:'" + title + "'"
+			+ " actionType:'" + actionType + "'"
+			+ " objectId:'" + objectId + "'"
+			+ " filters:'" + filters + "'"
+			+ " suggestions:'" + suggestions + "'"
 		);
 
 		GameRequestContent.Builder builder = new GameRequestContent.Builder();
