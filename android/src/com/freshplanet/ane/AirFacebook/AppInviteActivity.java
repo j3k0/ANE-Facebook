@@ -52,21 +52,21 @@ public class AppInviteActivity extends Activity implements FacebookCallback<AppI
 	@Override
 	public void onSuccess(AppInviteDialog.Result result) {
 		AirFacebookExtension.log("SUCCESS! " + result.toString());
-		AirFacebookExtension.context.dispatchStatusEventAsync(callback, "SUCCESS");
+		AirFacebookExtension.context.dispatchStatusEventAsync("APPINVITE_SUCCESS_" + callback, result.toString());
 		finish();
 	}
 
 	@Override
 	public void onCancel() {
 		AirFacebookExtension.log("CANCELLED!");
-		AirFacebookExtension.context.dispatchStatusEventAsync(callback, "CANCELLED");
+		AirFacebookExtension.context.dispatchStatusEventAsync("APPINVITE_CANCELLED_" + callback, "{}");
 		finish();
 	}
 
 	@Override
 	public void onError(FacebookException error) {
 		AirFacebookExtension.log("ERROR!" + error.getMessage());
-		AirFacebookExtension.context.dispatchStatusEventAsync(callback, "ERROR");
+		AirFacebookExtension.context.dispatchStatusEventAsync("APPINVITE_ERROR_" + callback, error.getMessage());
 		finish();
 	}
 }
