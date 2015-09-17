@@ -66,9 +66,7 @@ public class GameRequestDialogFunction extends BaseFunction implements FREFuncti
 
 		GameRequestContent.Builder builder = new GameRequestContent.Builder();
 		if(message != null) builder.setMessage(message);
-		// TODO: send ticket to FB
-		// Android game request to do not support multiple targets. Use first target.
-		if(to != null && to.size() > 0) builder.setTo(to.get(0));
+		if(to != null) builder.setRecipients(to);
 		if(data != null) builder.setData(data);
 		if(title != null) builder.setTitle(title);
 		if(actionType != null) builder.setActionType(actionType);
