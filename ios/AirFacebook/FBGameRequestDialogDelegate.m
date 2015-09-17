@@ -23,7 +23,11 @@
 
 - (void)showGameRequestDialogWithContent:(FBSDKGameRequestContent *)content
 {
-    [FBSDKGameRequestDialog showWithContent:content delegate:self];
+    FBSDKGameRequestDialog *dialog = [[FBSDKGameRequestDialog alloc] init];
+    dialog.content = content;
+    dialog.delegate = self;
+    //dialog.frictionlessRequestsEnabled = TRUE;
+    [dialog show];
 }
 
 - (void)gameRequestDialog:(FBSDKGameRequestDialog *)gameRequestDialog didCompleteWithResults:(NSDictionary *)results
