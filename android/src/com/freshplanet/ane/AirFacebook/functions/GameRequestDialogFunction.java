@@ -15,8 +15,6 @@ public class GameRequestDialogFunction extends BaseFunction implements FREFuncti
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		// Retrieve callback
 		String message = FREConversionUtil.toString(FREConversionUtil.getProperty("message", args[0]));
 		ArrayList<String> to = getStringListProperty(args[0], "to");

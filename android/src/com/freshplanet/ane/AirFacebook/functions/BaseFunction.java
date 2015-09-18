@@ -7,21 +7,12 @@ import java.util.Set;
 import android.os.Bundle;
 
 import com.adobe.fre.*;
-import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
-import com.freshplanet.ane.AirFacebook.AirFacebookExtensionContext;
 
-public class BaseFunction implements FREFunction
+abstract public class BaseFunction implements FREFunction
 {
 	public static final int TYPE_STRING = 0;
 	public static final int TYPE_INT = 1;
 	public static final int TYPE_BOOL = 2;
-
-	@Override
-	public FREObject call(FREContext context, FREObject[] args)
-	{
-		AirFacebookExtension.context = (AirFacebookExtensionContext)context;
-		return null;
-	}
 
 	protected String getStringProperty(FREObject object, String property)
 	{

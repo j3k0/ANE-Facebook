@@ -11,8 +11,6 @@ public class SetLoginBehaviorFunction extends BaseFunction {
     @Override
     public FREObject call(FREContext context, FREObject[] args)
     {
-        super.call(context, args);
-
         LoginBehavior loginBehavior;
 
         int loginBehaviorInt = getIntFromFREObject(args[0]);

@@ -10,8 +10,6 @@ public class InitFacebookFunction extends BaseFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
         String appID = getStringFromFREObject(args[0]);
 		final String callback = getStringFromFREObject(args[1]);
 

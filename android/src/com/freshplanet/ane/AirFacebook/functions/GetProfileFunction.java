@@ -9,8 +9,6 @@ public class GetProfileFunction extends BaseFunction {
 
     public FREObject call(FREContext context, FREObject[] args)
     {
-        super.call(context, args);
-
         AirFacebookExtension.log("GetProfileFunction");
 
         Profile profile = Profile.getCurrentProfile();

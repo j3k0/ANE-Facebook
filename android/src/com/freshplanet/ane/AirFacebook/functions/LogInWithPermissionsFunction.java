@@ -13,8 +13,6 @@ public class LogInWithPermissionsFunction extends BaseFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-		
 		List<String> permissions = getListOfStringFromFREArray((FREArray)args[0]);
 		String type = getStringFromFREObject(args[1]);
 

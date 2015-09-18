@@ -9,8 +9,6 @@ public class LogEventFunction extends BaseFunction
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		try {
 			String eventName = args[0].getProperty("eventName").getAsString();
 			Double valueToSum = args[0].getProperty("valueToSum").getAsDouble();

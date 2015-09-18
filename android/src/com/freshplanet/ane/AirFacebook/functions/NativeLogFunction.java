@@ -11,8 +11,6 @@ import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 public class NativeLogFunction extends BaseFunction {
     public FREObject call(FREContext context, FREObject[] args)
     {
-        super.call(context, args);
-
         String message = getStringFromFREObject(args[0]);
 
         // NOTE: logs from as3 should go only to native log

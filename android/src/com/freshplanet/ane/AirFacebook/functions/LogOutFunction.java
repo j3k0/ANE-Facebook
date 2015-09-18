@@ -11,8 +11,6 @@ public class LogOutFunction extends BaseFunction
 {	
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		AirFacebookExtension.log("CloseSessionAndClearTokenInformationFunction");
 
 		AccessToken.setCurrentAccessToken(null);

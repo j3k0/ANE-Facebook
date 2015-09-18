@@ -11,8 +11,6 @@ public class SetDefaultShareDialogModeFunction extends BaseFunction {
     @Override
     public FREObject call(FREContext context, FREObject[] args)
     {
-        super.call(context, args);
-
         ShareDialog.Mode defaultShareDialogMode;
 
         int defaultShareDialogModeInt = getIntFromFREObject(args[0]);

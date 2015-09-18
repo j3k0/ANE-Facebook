@@ -9,8 +9,6 @@ public class CanPresentShareDialogFunction extends BaseFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		try {
 			return FREObject.newObject(ShareDialog.canShow(ShareLinkContent.class));
 		}

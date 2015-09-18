@@ -16,8 +16,6 @@ public class ShareLinkDialogFunction extends BaseFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		// Retrieve callback
 		String contentUrl = getStringProperty(args[0], "contentUrl");
 		List<String> peopleIds = getStringListProperty(args[0], "peopleIds");

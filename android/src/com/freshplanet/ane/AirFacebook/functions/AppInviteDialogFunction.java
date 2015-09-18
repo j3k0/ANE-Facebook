@@ -13,8 +13,6 @@ public class AppInviteDialogFunction extends BaseFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-		
 		// Retrieve callback
 		String appLinkUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("appLinkUrl", args[0]));
 		String previewImageUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("previewImageUrl", args[0]));

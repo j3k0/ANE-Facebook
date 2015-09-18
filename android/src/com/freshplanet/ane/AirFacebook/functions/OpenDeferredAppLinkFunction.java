@@ -11,8 +11,6 @@ public class OpenDeferredAppLinkFunction extends BaseFunction
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
    	 /* Facebook Docs
    	  * https://developers.facebook.com/docs/ads-for-apps/mobile-app-ads-engagement#measure
    	  */

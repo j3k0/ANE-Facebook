@@ -10,8 +10,6 @@ public class SetDefaultAudienceFunction extends BaseFunction
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		DefaultAudience defaultAudience;
 
 		int defaultAudienceInt = getIntFromFREObject(args[0]);

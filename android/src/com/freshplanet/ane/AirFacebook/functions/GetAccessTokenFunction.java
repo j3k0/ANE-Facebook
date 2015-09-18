@@ -9,8 +9,6 @@ public class GetAccessTokenFunction extends BaseFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
 		AirFacebookExtension.log("GetAccessTokenFunction");
 
 		AccessToken accessToken = AccessToken.getCurrentAccessToken();
