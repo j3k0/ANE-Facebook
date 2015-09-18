@@ -9,15 +9,15 @@ import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 import com.freshplanet.ane.AirFacebook.GameRequestActivity;
 import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class GameRequestDialogFunction extends BaseFunction implements FREFunction
+public class GameRequestDialogFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
 		// Retrieve callback
 		String message = FREConversionUtil.toString(FREConversionUtil.getProperty("message", args[0]));
-		ArrayList<String> to = getStringListProperty(args[0], "to");
+		List<String> to = FREConversionUtil.toStringArray(FREConversionUtil.getProperty("to", args[0]));
 		String data = FREConversionUtil.toString(FREConversionUtil.getProperty("data", args[0]));
 		String title = FREConversionUtil.toString(FREConversionUtil.getProperty("title", args[0]));
 
@@ -25,12 +25,21 @@ public class GameRequestDialogFunction extends BaseFunction implements FREFuncti
 		FREObject actionTypeObject = FREConversionUtil.getProperty("actionType", args[0]);
 		if(actionTypeObject != null) {
 
-			int actionTypeInt = getIntFromFREObject(FREConversionUtil.getProperty("value", actionTypeObject));
-			switch (actionTypeInt){
-				case 1: actionType = GameRequestContent.ActionType.SEND; break;
-				case 2: actionType = GameRequestContent.ActionType.ASKFOR; break;
-				case 3: actionType = GameRequestContent.ActionType.TURN; break;
-				default: actionType = null;
+			Integer actionTypeInt = FREConversionUtil.toInt(FREConversionUtil.getProperty("value", actionTypeObject));
+			if(actionTypeInt != null) {
+				switch (actionTypeInt) {
+					case 1:
+						actionType = GameRequestContent.ActionType.SEND;
+						break;
+					case 2:
+						actionType = GameRequestContent.ActionType.ASKFOR;
+						break;
+					case 3:
+						actionType = GameRequestContent.ActionType.TURN;
+						break;
+					default:
+						actionType = null;
+				}
 			}
 		}
 
@@ -40,16 +49,23 @@ public class GameRequestDialogFunction extends BaseFunction implements FREFuncti
 		FREObject filtersObject = FREConversionUtil.getProperty("filters", args[0]);
 		if(filtersObject != null) {
 
-			int filtersObjectInt = getIntFromFREObject(FREConversionUtil.getProperty("value", filtersObject));
-			switch (filtersObjectInt){
-				case 1: filters = GameRequestContent.Filters.APP_USERS; break;
-				case 2: filters = GameRequestContent.Filters.APP_NON_USERS; break;
-				default: actionType = null;
+			Integer filtersObjectInt = FREConversionUtil.toInt(FREConversionUtil.getProperty("value", filtersObject));
+			if(filtersObjectInt != null) {
+				switch (filtersObjectInt) {
+					case 1:
+						filters = GameRequestContent.Filters.APP_USERS;
+						break;
+					case 2:
+						filters = GameRequestContent.Filters.APP_NON_USERS;
+						break;
+					default:
+						actionType = null;
+				}
 			}
 		}
 
-		ArrayList<String> suggestions = getStringListProperty(args[0], "suggestions");
-		String callback = getStringFromFREObject(args[1]);
+		List<String> suggestions = FREConversionUtil.toStringArray(FREConversionUtil.getProperty("suggestions", args[0]));
+		String callback = FREConversionUtil.toString(args[1]);
 
 		AirFacebookExtension.log("GameRequestDialogFunction"
 			+ " message:'" + message + "'"

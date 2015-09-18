@@ -5,6 +5,7 @@ import com.adobe.fre.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by nodrock on 30/06/15.
@@ -78,6 +79,25 @@ public class FREConversionUtil {
         }
     }
 
+    public static FREArray fromStringSet(Set<String> value) {
+
+        try
+        {
+            long i = 0;
+            FREArray array = FREArray.newArray(value.size());
+            for (String item : value) {
+                array.setObjectAt(i, FREObject.newObject(item));
+                i++;
+            }
+            return array;
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static String toString(FREObject object){
         try
         {
@@ -126,11 +146,13 @@ public class FREConversionUtil {
         }
     }
 
-    public static List<String> toStringArray(FREArray array){
+    public static ArrayList<String> toStringArray(FREObject object){
         ArrayList<String> result = new ArrayList<>();
 
         try
         {
+            FREArray array = (FREArray)object;
+
             for (Integer i = 0; i < array.getLength(); i++)
             {
                 try

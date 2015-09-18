@@ -9,24 +9,25 @@ import com.adobe.fre.FREObject;
 import com.facebook.share.model.ShareLinkContent;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 import com.freshplanet.ane.AirFacebook.ShareDialogActivity;
+import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
 
 import java.util.List;
 
-public class ShareLinkDialogFunction extends BaseFunction implements FREFunction
+public class ShareLinkDialogFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
 		// Retrieve callback
-		String contentUrl = getStringProperty(args[0], "contentUrl");
-		List<String> peopleIds = getStringListProperty(args[0], "peopleIds");
-		String placeId = getStringProperty(args[0], "placeId");
-		String ref = getStringProperty(args[0], "ref");
-		String contentTitle = getStringProperty(args[0], "contentTitle");
-		String contentDescription = getStringProperty(args[0], "contentDescription");
-		String imageUrl = getStringProperty(args[0], "imageUrl");
+		String contentUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("contentUrl", args[0]));
+		List<String> peopleIds = FREConversionUtil.toStringArray(FREConversionUtil.getProperty("peopleIds", args[0]));
+		String placeId = FREConversionUtil.toString(FREConversionUtil.getProperty("placeId", args[0]));
+		String ref = FREConversionUtil.toString(FREConversionUtil.getProperty("ref", args[0]));
+		String contentTitle = FREConversionUtil.toString(FREConversionUtil.getProperty("contentTitle", args[0]));
+		String contentDescription = FREConversionUtil.toString(FREConversionUtil.getProperty("contentDescription", args[0]));
+		String imageUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("imageUrl", args[0]));
 		
-		Boolean useShareApi = getBooleanFromFREObject(args[1]);
-		String callback = getStringFromFREObject(args[2]);
+		Boolean useShareApi = FREConversionUtil.toBoolean(args[1]);
+		String callback = FREConversionUtil.toString(args[2]);
 
 		AirFacebookExtension.log("ShareLinkDialogFunction");
 
