@@ -20,7 +20,6 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
-#import "FPANEUtils.h"
 
 typedef void (^FBOpenSessionCompletionHandler)(FBSDKLoginManagerLoginResult *result, NSError *error);
 

@@ -12,19 +12,16 @@ public class LogEventFunction extends BaseFunction
 		super.call(context, args);
 
 		try {
-			FREObject eventNameObject = args[0].getProperty("eventName");
-			FREObject valueToSumObject = args[0].getProperty("valueToSum");
-			FREArray paramsKeysArray = (FREArray)args[0].getProperty("paramsKeys");
-			FREArray paramsTypesArray = (FREArray)args[0].getProperty("paramsTypes");
-			FREArray paramsValuesArray = (FREArray)args[0].getProperty("paramsValues");
-
-			String eventNameString = eventNameObject.getProperty("value").getAsString();
-			Double valueToSum = valueToSumObject.getAsDouble();
+			String eventName = args[0].getProperty("eventName").getAsString();
+			Double valueToSum = args[0].getProperty("valueToSum").getAsDouble();
+			FREArray paramsKeysArray = (FREArray)args[0].getProperty("keys");
+			FREArray paramsTypesArray = (FREArray)args[0].getProperty("types");
+			FREArray paramsValuesArray = (FREArray)args[0].getProperty("values");
 
 			Bundle parameters = getBundleFromFREArrays(paramsKeysArray, paramsTypesArray, paramsValuesArray);
 
 			AppEventsLogger logger = AppEventsLogger.newLogger(context.getActivity().getApplicationContext());
-			logger.logEvent(eventNameString, valueToSum, parameters);
+			logger.logEvent(eventName, valueToSum, parameters);
 
 		} catch (FRETypeMismatchException | FREInvalidObjectException | FREASErrorException | FRENoSuchNameException | FREWrongThreadException e) {
 			e.printStackTrace();
