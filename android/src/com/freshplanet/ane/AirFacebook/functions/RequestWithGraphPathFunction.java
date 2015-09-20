@@ -10,13 +10,13 @@ import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 import com.freshplanet.ane.AirFacebook.RequestThread;
 import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
 
-public class RequestWithGraphPathFunction extends BaseFunction
+public class RequestWithGraphPathFunction implements FREFunction
 {
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
 		String graphPath = FREConversionUtil.toString(args[0]);
-		Bundle parameters = getBundleOfStringFromFREArrays((FREArray)args[1], (FREArray)args[2]);
+		Bundle parameters = FREConversionUtil.toStringBundle((FREArray) args[1], (FREArray) args[2]);
 		String httpMethod = FREConversionUtil.toString(args[3]);
 		String callback = FREConversionUtil.toString(args[4]);
 

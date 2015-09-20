@@ -1,16 +1,20 @@
 package com.freshplanet.ane.AirFacebook.utils;
 
+import android.os.Bundle;
 import com.adobe.fre.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 /**
  * Created by nodrock on 30/06/15.
  */
 public class FREConversionUtil {
+
+    public static final int TYPE_STRING = 0;
+    public static final int TYPE_INT = 1;
+    public static final int TYPE_BOOL = 2;
 
     public static FREObject fromString(String value){
         try
@@ -110,7 +114,7 @@ public class FREConversionUtil {
         }
     }
 
-    public static Number toNumber(FREObject object){
+    public static Double toDouble(FREObject object){
         try
         {
             return object.getAsDouble();
@@ -162,6 +166,105 @@ public class FREConversionUtil {
                 catch (Exception e)
                 {
                     e.printStackTrace();
+                }
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static Bundle toStringBundle(FREObject object)
+    {
+        try
+        {
+            FREArray keys = (FREArray) object.getProperty("keys");
+            FREArray values = (FREArray) object.getProperty("values");
+            return toStringBundle(keys, values);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Bundle toStringBundle(FREArray keys, FREArray values)
+    {
+        Bundle result = new Bundle();
+
+        try
+        {
+            long keysLength = keys.getLength();
+            long valuesLength = values.getLength();
+            if(keysLength != valuesLength)
+            {
+                throw new Error("Wrong input arrays length!");
+            }
+            for (long i = 0; i < keysLength; i++)
+            {
+                String key = FREConversionUtil.toString(keys.getObjectAt(i));
+                String value = FREConversionUtil.toString(values.getObjectAt(i));
+                result.putString(key, value);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+
+        return result;
+    }
+
+    public static Bundle toBundle(FREObject object)
+    {
+        try
+        {
+            FREArray keys = (FREArray) object.getProperty("keys");
+            FREArray types = (FREArray) object.getProperty("types");
+            FREArray values = (FREArray) object.getProperty("values");
+            return toBundle(keys, types, values);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Bundle toBundle(FREArray keys, FREArray types, FREArray values)
+    {
+        Bundle result = new Bundle();
+
+        try
+        {
+            long length = keys.getLength();
+
+            if(length != types.getLength() || length != values.getLength())
+            {
+                throw new Error("Wrong input arrays length!");
+            }
+
+            for (long i = 0; i < length; i++) {
+
+                String key = keys.getObjectAt(i).getAsString();
+                int type = types.getObjectAt(i).getAsInt();
+                FREObject valueObject = values.getObjectAt(i);
+                switch (type){
+                    case TYPE_STRING:
+                        result.putString(key, valueObject.getAsString());
+                        break;
+                    case TYPE_INT:
+                        result.putInt(key, valueObject.getAsInt());
+                        break;
+                    case TYPE_BOOL:
+                        result.putBoolean(key, valueObject.getAsBool());
+                        break;
                 }
             }
         }
