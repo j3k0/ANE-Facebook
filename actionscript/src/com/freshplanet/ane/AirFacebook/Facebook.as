@@ -435,9 +435,9 @@ public class Facebook extends EventDispatcher {
         }
     }
 
-    public function share(content:FBShareOpenGraphContent):void
+    public function shareOpenGraph(content:FBShareOpenGraphContent):void
     {
-        _context.call("share", content);
+        _context.call("shareOpenGraph", content);
     }
 
     // --------------------------------------------------------------------------------------//

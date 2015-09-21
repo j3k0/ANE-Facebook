@@ -46,5 +46,3 @@ typedef void (^FBOpenSessionCompletionHandler)(FBSDKLoginManagerLoginResult *res
 @property (nonatomic) FREContext context;
 
 @end
-
-DEFINE_ANE_FUNCTION(shareOpenGraph);

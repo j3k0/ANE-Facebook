@@ -14,12 +14,10 @@ import com.freshplanet.ane.AirFacebook.utils.FacebookObjectsConversionUtil;
 
 import java.util.List;
 
-public class ShareOpenGraphFunction extends BaseFunction implements FREFunction
+public class ShareOpenGraphFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-		
 //		Boolean useShareApi = getBooleanFromFREObject(args[1]);
 //		String callback = getStringFromFREObject(args[2]);
 
