@@ -2,17 +2,16 @@
 package com.freshplanet.ane.AirFacebook.functions;
 
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 //import com.facebook.AppEventsLogger;
 //import com.facebook.AppLinkData;
 
-public class OpenDeferredAppLinkFunction extends BaseFunction
+public class OpenDeferredAppLinkFunction implements FREFunction
 {
 	@Override
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
    	 /* Facebook Docs
    	  * https://developers.facebook.com/docs/ads-for-apps/mobile-app-ads-engagement#measure
    	  */

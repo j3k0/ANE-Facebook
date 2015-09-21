@@ -1,22 +1,15 @@
 package com.freshplanet.ane.AirFacebook.functions;
 
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.facebook.share.widget.AppInviteDialog;
+import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
 
-public class CanPresentAppInviteDialogFunction extends BaseFunction
+public class CanPresentAppInviteDialogFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
-		try {
-			return FREObject.newObject(AppInviteDialog.canShow());
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
-		}
+		return FREConversionUtil.fromBoolean(AppInviteDialog.canShow());
 	}
 }

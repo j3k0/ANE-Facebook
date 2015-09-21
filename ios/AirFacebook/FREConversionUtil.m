@@ -10,6 +10,24 @@
 
 @implementation FREConversionUtil
 
+typedef NS_ENUM(NSUInteger, ConversionType)
+{
+    ConversionTypeString = 0,
+    ConversionTypeInt,
+    ConversionTypeBool,
+    ConversionTypeLong,
+    ConversionTypeDouble,
+    
+    ConversionTypeStringArray,
+    ConversionTypeIntArray,
+    ConversionTypeBoolArray,
+    ConversionTypeLongArray,
+    ConversionTypeDoubleArray,
+    
+    ConversionTypeObject,
+    ConversionTypeObjectArray
+};
+
 + (FREObject)fromString:(NSString *)value {
     FREObject object;
     
@@ -141,6 +159,19 @@
     return (value) ? YES : NO;
 }
 
++ (NSNumber *)toLong:(FREObject)object {
+    double value = 0;
+    
+    FREResult result = FREGetObjectAsDouble(object, &value);
+    
+    if (result != FRE_OK) {
+        
+        return [NSNumber numberWithLongLong:value];
+    }
+    
+    return [NSNumber numberWithLongLong:value];
+}
+
 + (NSArray *)toStringArray:(FREObject)object {
     NSMutableArray *array = [[NSMutableArray alloc] init];
     
@@ -156,6 +187,241 @@
     }
     
     return [array copy];
+}
+
++ (NSArray *)toIntArray:(FREObject)object {
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    @try {
+        NSUInteger length = [FREConversionUtil getArrayLength:object];
+        for(NSUInteger i = 0; i<length; i++){
+            [array addObject:@([FREConversionUtil toInt:[FREConversionUtil getArrayItemAt:i on:object]])]; // same as [NSNumber numberWithLong:value]
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [array copy];
+}
+
++ (NSArray *)toBoolArray:(FREObject)object {
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    @try {
+        NSUInteger length = [FREConversionUtil getArrayLength:object];
+        for(NSUInteger i = 0; i<length; i++){
+            [array addObject:@([FREConversionUtil toBoolean:[FREConversionUtil getArrayItemAt:i on:object]])]; // same as [NSNumber numberWithBool:value]
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [array copy];
+}
+
++ (NSArray *)toLongArray:(FREObject)object {
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    @try {
+        NSUInteger length = [FREConversionUtil getArrayLength:object];
+        for(NSUInteger i = 0; i<length; i++){
+            [array addObject:[FREConversionUtil toLong:[FREConversionUtil getArrayItemAt:i on:object]]];
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [array copy];
+}
+
++ (NSArray *)toDoubleArray:(FREObject)object {
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    @try {
+        NSUInteger length = [FREConversionUtil getArrayLength:object];
+        for(NSUInteger i = 0; i<length; i++){
+            [array addObject:[FREConversionUtil toNumber:[FREConversionUtil getArrayItemAt:i on:object]]];
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [array copy];
+}
+
++ (NSArray *)toDictionaryArray:(FREObject)object {
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    
+    @try {
+        NSUInteger length = [FREConversionUtil getArrayLength:object];
+        for(NSUInteger i = 0; i<length; i++){
+            [array addObject:[FREConversionUtil toDictionary:[FREConversionUtil getArrayItemAt:i on:object]]];
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [array copy];
+}
+
+
++ (NSDictionary *)toStringDictionary:(FREObject)object {
+    
+    FREObject keys = [FREConversionUtil getProperty:@"keys" fromObject:object];
+    FREObject values = [FREConversionUtil getProperty:@"values" fromObject:object];
+        
+    return [FREConversionUtil toStringDictionaryFromKeys:keys andValues:values];
+}
+
++ (NSDictionary *)toStringDictionaryFromKeys:(FREObject)keys andValues:(FREObject)values {
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    
+    @try {
+        NSUInteger keysLength = [FREConversionUtil getArrayLength:keys];
+        NSUInteger valuesLength = [FREConversionUtil getArrayLength:values];
+        if(keysLength != valuesLength){
+            
+            return nil;
+        }
+        
+        for(NSUInteger i = 0; i<keysLength; i++){
+            
+            NSString *key = [FREConversionUtil toString:[FREConversionUtil getArrayItemAt:i on:keys]];
+            NSString *value = [FREConversionUtil toString:[FREConversionUtil getArrayItemAt:i on:values]];
+            [dictionary setObject:value forKey:key];
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [dictionary copy];
+}
+
++ (NSDictionary *)toDictionary:(FREObject)object {
+    
+    FREObject keys = [FREConversionUtil getProperty:@"keys" fromObject:object];
+    FREObject types = [FREConversionUtil getProperty:@"types" fromObject:object];
+    FREObject values = [FREConversionUtil getProperty:@"values" fromObject:object];
+    
+    return [FREConversionUtil toDictionaryFromKeys:keys types:types andValues:values];
+}
+
++ (NSDictionary *)toDictionaryFromKeys:(FREObject)keys types:(FREObject)types andValues:(FREObject)values {
+    
+    NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] init];
+    
+    @try {
+        NSUInteger keysLength = [FREConversionUtil getArrayLength:keys];
+        NSUInteger typesLength = [FREConversionUtil getArrayLength:types];
+        NSUInteger valuesLength = [FREConversionUtil getArrayLength:values];
+        if(keysLength != valuesLength || keysLength != typesLength){
+            
+            return nil;
+        }
+        
+        for(NSUInteger i = 0; i<keysLength; i++){
+            
+            NSString *key = [FREConversionUtil toString:[FREConversionUtil getArrayItemAt:i on:keys]];
+            ConversionType type = [FREConversionUtil toUInt:[FREConversionUtil getArrayItemAt:i on:types]];
+            FREObject rawValue = [FREConversionUtil getArrayItemAt:i on:values];
+            
+            switch (type) {
+                case ConversionTypeString:
+                {
+                    NSString *value = [FREConversionUtil toString:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeInt:
+                {
+                    NSInteger value = [FREConversionUtil toInt:rawValue];
+                    [dictionary setObject:@(value) forKey:key]; // same as [NSNumber numberWithLong:value]
+                    break;
+                }
+                case ConversionTypeBool:
+                {
+                    BOOL value = [FREConversionUtil toBoolean:rawValue];
+                    [dictionary setObject:@(value) forKey:key]; // same as [NSNumber numberWithBool:value]
+                    break;
+                }
+                case ConversionTypeLong:
+                {
+                    NSNumber *value = [FREConversionUtil toLong:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeDouble:
+                {
+                    NSNumber *value = [FREConversionUtil toNumber:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeStringArray:
+                {
+                    NSArray *value = [FREConversionUtil toStringArray:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeIntArray:
+                {
+                    NSArray *value = [FREConversionUtil toIntArray:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeBoolArray:
+                {
+                    NSArray *value = [FREConversionUtil toBoolArray:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeLongArray:
+                {
+                    NSArray *value = [FREConversionUtil toLongArray:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeDoubleArray:
+                {
+                    NSArray *value = [FREConversionUtil toDoubleArray:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeObject:
+                {
+                    NSDictionary *value = [FREConversionUtil toDictionary:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                case ConversionTypeObjectArray:
+                {
+                    NSArray *value = [FREConversionUtil toDictionaryArray:rawValue];
+                    [dictionary setObject:value forKey:key];
+                    break;
+                }
+                default:
+                    continue;
+            }
+        }
+    }
+    @catch (NSException *exception) {
+        
+        return nil;
+    }
+    
+    return [dictionary copy];
 }
 
 + (FREObject)getProperty:(NSString *)name fromObject:(FREObject)object {

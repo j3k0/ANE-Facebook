@@ -47,21 +47,21 @@
 {
     NSString *resultString = [AirFacebook jsonStringFromObject:results andPrettyPrint:NO];
     [AirFacebook log:@"SHARE_COMPLETE JSON: %@", resultString];
-    [AirFacebook dispatchEvent:[NSString stringWithFormat:@"SHARE_SUCCESS_%@", callback] withMessage:resultString];
+    [[AirFacebook sharedInstance] dispatchEvent:[NSString stringWithFormat:@"SHARE_SUCCESS_%@", callback] withMessage:resultString];
     [[AirFacebook sharedInstance] shareFinishedForCallback:callback];
 }
 
 -(void)sharer:(id<FBSDKSharing>)sharer didFailWithError:(NSError *)error
 {
     [AirFacebook log:@"SHARE_ERROR error: %@", [error description]];
-    [AirFacebook dispatchEvent:[NSString stringWithFormat:@"SHARE_ERROR_%@", callback] withMessage:[error description]];
+    [[AirFacebook sharedInstance] dispatchEvent:[NSString stringWithFormat:@"SHARE_ERROR_%@", callback] withMessage:[error description]];
     [[AirFacebook sharedInstance] shareFinishedForCallback:callback];
 }
 
 -(void)sharerDidCancel:(id<FBSDKSharing>)sharer
 {
     [AirFacebook log:@"SHARE_CANCEL"];
-    [AirFacebook dispatchEvent:[NSString stringWithFormat:@"SHARE_CANCELLED_%@", callback] withMessage:@"OK"];
+    [[AirFacebook sharedInstance] dispatchEvent:[NSString stringWithFormat:@"SHARE_CANCELLED_%@", callback] withMessage:@"OK"];
     [[AirFacebook sharedInstance] shareFinishedForCallback:callback];
 }
 

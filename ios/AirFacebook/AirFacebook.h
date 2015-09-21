@@ -20,7 +20,6 @@
 #import <FBSDKCoreKit/FBSDKCoreKit.h>
 #import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import <FBSDKShareKit/FBSDKShareKit.h>
-#import "FPANEUtils.h"
 
 typedef void (^FBOpenSessionCompletionHandler)(FBSDKLoginManagerLoginResult *result, NSError *error);
 
@@ -28,53 +27,24 @@ typedef void (^FBOpenSessionCompletionHandler)(FBSDKLoginManagerLoginResult *res
 
 + (id)sharedInstance;
 
-+ (void)dispatchEvent:(NSString *)event withMessage:(NSString *)message;
+- (void)dispatchEvent:(NSString *)event withMessage:(NSString *)message;
 + (void)log:(NSString *)string, ...;
 + (NSString*) jsonStringFromObject:(id)obj andPrettyPrint:(BOOL) prettyPrint;
 
-//- (void)didFinishLaunching:(NSNotification *)notification;
-
 - (void)shareFinishedForCallback:(NSString *)callback;
 - (void)shareContent:(FBSDKShareLinkContent *)content usingShareApi:(BOOL)useShareApi andCallback:(NSString *)callback;
+
++ (FBOpenSessionCompletionHandler)openSessionCompletionHandler;
++ (void)nativeLog:(NSString *)message withPrefix:(NSString *)prefix;
+- (void)showAppInviteDialogWithContent:(FBSDKAppInviteContent *)content andCallback:(NSString *)callback;
+- (void)showGameRequestDialogWithContent:(FBSDKGameRequestContent *)content andCallback:(NSString *)callback;
 
 @property (nonatomic, getter=isNativeLogEnabled) BOOL nativeLogEnabled;
 @property (nonatomic) FBSDKShareDialogMode defaultShareDialogMode;
 @property (nonatomic) FBSDKDefaultAudience defaultAudience;
 @property (nonatomic) FBSDKLoginBehavior loginBehavior;
+@property (nonatomic) FREContext context;
 
 @end
 
-// C interface
-DEFINE_ANE_FUNCTION(initFacebook);
-DEFINE_ANE_FUNCTION(handleOpenURL);
-DEFINE_ANE_FUNCTION(getAccessToken);
-DEFINE_ANE_FUNCTION(getProfile);
-DEFINE_ANE_FUNCTION(logInWithPermissions);
-DEFINE_ANE_FUNCTION(logOut);
-DEFINE_ANE_FUNCTION(requestWithGraphPath);
-
-// Settings
-DEFINE_ANE_FUNCTION(setDefaultAudience);
-DEFINE_ANE_FUNCTION(setLoginBehavior);
-DEFINE_ANE_FUNCTION(setDefaultShareDialogMode);
-
-// Sharing dialogs
-DEFINE_ANE_FUNCTION(canPresentShareDialog);
 DEFINE_ANE_FUNCTION(shareOpenGraph);
-DEFINE_ANE_FUNCTION(shareLinkDialog);
-DEFINE_ANE_FUNCTION(appInviteDialog);
-DEFINE_ANE_FUNCTION(gameRequestDialog);
-
-// FB events
-DEFINE_ANE_FUNCTION(activateApp);
-DEFINE_ANE_FUNCTION(logEvent);
-
-// Debug
-DEFINE_ANE_FUNCTION(nativeLog);
-DEFINE_ANE_FUNCTION(setNativeLogEnabled);
-
-// ANE Setup
-void AirFacebookContextInitializer(void* extData, const uint8_t* ctxType, FREContext ctx, uint32_t* numFunctionsToTest, const FRENamedFunction** functionsToSet);
-void AirFacebookContextFinalizer(FREContext ctx);
-void AirFacebookInitializer(void** extDataToSet, FREContextInitializer* ctxInitializerToSet, FREContextFinalizer* ctxFinalizerToSet);
-void AirFacebookFinalizer(void *extData);

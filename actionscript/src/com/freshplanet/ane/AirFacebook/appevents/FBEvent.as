@@ -123,17 +123,17 @@ public class FBEvent {
         return _valueToSum;
     }
 
-    public function get paramsKeys():Array
+    public function get keys():Array
     {
         return _paramsKeys;
     }
 
-    public function get paramsTypes():Array
+    public function get types():Array
     {
         return _paramsTypes;
     }
 
-    public function get paramsValues():Array
+    public function get values():Array
     {
         return _paramsValues;
     }
