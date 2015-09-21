@@ -1,5 +1,6 @@
 package com.freshplanet.ane.AirFacebook.utils;
 
+import android.os.Bundle;
 import com.adobe.fre.*;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 
@@ -16,6 +17,100 @@ public class ValueContainer {
         keys = new ArrayList<>();
         types = new ArrayList<>();
         values = new ArrayList<>();
+    }
+
+    /**
+     * Should replace toBundle from FREConversionUtil in short time.
+     * @return
+     */
+    public Bundle toBundle()
+    {
+        Bundle bundle = new Bundle();
+
+        for(int i = 0; i<keys.size(); i++){
+
+            String key = keys.get(i);
+            ConversionType conversionType = types.get(i);
+            switch (conversionType){
+                case STRING:
+                    bundle.putString(key, (String)values.get(i));
+                    break;
+                case INT:
+                    bundle.putInt(key, (Integer) values.get(i));
+                    break;
+                case BOOL:
+                    bundle.putBoolean(key, (Boolean) values.get(i));
+                    break;
+                case DOUBLE:
+                    bundle.putDouble(key, (Double) values.get(i));
+                    break;
+                case LONG:
+                    bundle.putLong(key, (Long) values.get(i));
+                    break;
+                case STRING_ARRAY:
+                    bundle.putStringArrayList(key, (ArrayList<String>) values.get(i));
+                    break;
+                case INT_ARRAY:
+                {
+                    List<Integer> list = (List<Integer>)values.get(i);
+                    int[] primitiveList = new int[list.size()];
+                    for(int j = 0; j<list.size(); j++){
+                        primitiveList[j] = list.get(j);
+                    }
+                    bundle.putIntArray(key, primitiveList);
+                }
+                break;
+                case BOOL_ARRAY:
+                {
+                    List<Boolean> list = (List<Boolean>) values.get(i);
+                    boolean[] primitiveList = new boolean[list.size()];
+                    for (int j = 0; j < list.size(); j++) {
+                        primitiveList[j] = list.get(j);
+                    }
+                    bundle.putBooleanArray(key, primitiveList);
+                }
+                break;
+                case DOUBLE_ARRAY:
+                {
+                    List<Double> list = (List<Double>) values.get(i);
+                    double[] primitiveList = new double[list.size()];
+                    for (int j = 0; j < list.size(); j++) {
+                        primitiveList[j] = list.get(j);
+                    }
+                    bundle.putDoubleArray(key, primitiveList);
+                }
+                break;
+                case LONG_ARRAY:
+                {
+                    List<Long> list = (List<Long>) values.get(i);
+                    long[] primitiveList = new long[list.size()];
+                    for (int j = 0; j < list.size(); j++) {
+                        primitiveList[j] = list.get(j);
+                    }
+                    bundle.putLongArray(key, primitiveList);
+                }
+                break;
+                case OBJECT:
+                {
+                    ValueContainer valueContainer = (ValueContainer) values.get(i);
+                    bundle.putBundle(key, valueContainer.toBundle());
+                }
+                break;
+                case OBJECT_ARRAY:
+                {
+                    ArrayList<Bundle> newList = new ArrayList<>();
+                    List<ValueContainer> list = (List<ValueContainer>) values.get(i);
+                    for (ValueContainer valueContainer : list) {
+                        newList.add(valueContainer.toBundle());
+                    }
+                    bundle.putParcelableArrayList(key, newList);
+                }
+                break;
+                default:
+            }
+        }
+
+        return bundle;
     }
 
     private void addValue(String key, ConversionType type, FREObject valueObject) throws FREInvalidObjectException, FRETypeMismatchException, FREWrongThreadException {
@@ -117,33 +212,25 @@ public class ValueContainer {
     {
         try
         {
+            FREArray keys = (FREArray) object.getProperty("keys");
+            FREArray types = (FREArray) object.getProperty("types");
+            FREArray values = (FREArray) object.getProperty("values");
+
             ValueContainer result = new ValueContainer();
-
-            FREArray keys = (FREArray)FREConversionUtil.getProperty("keys", object);
-            FREArray types = (FREArray)FREConversionUtil.getProperty("types", object);
-            FREArray values = (FREArray)FREConversionUtil.getProperty("values", object);
-
-            AirFacebookExtension.log("getValueContainer " + keys + " " + types + " " + values);
 
             long length = keys.getLength();
 
-            if(length != types.getLength() || length != values.getLength()){
+            if(length != types.getLength() || length != values.getLength())
+            {
                 throw new Error("Wrong input arrays length!");
             }
 
             for (long i = 0; i < length; i++) {
-                try {
-                    String key = FREConversionUtil.toString(keys.getObjectAt(i));
-                    int valueType = FREConversionUtil.toInt(types.getObjectAt(i));
-                    ConversionType conversionType = ConversionType.fromValue(valueType);
+                String key = keys.getObjectAt(i).getAsString();
+                ConversionType conversionType = ConversionType.fromValue(types.getObjectAt(i).getAsInt());
+                FREObject valueObject = values.getObjectAt(i);
 
-                    FREObject valueObject = values.getObjectAt(i);
-                    result.addValue(key, conversionType, valueObject);
-                }
-                catch (Exception e)
-                {
-                    e.printStackTrace();
-                }
+                result.addValue(key, conversionType, valueObject);
             }
 
             return result;

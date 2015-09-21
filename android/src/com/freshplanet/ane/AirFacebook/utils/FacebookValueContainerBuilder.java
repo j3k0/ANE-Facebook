@@ -89,24 +89,24 @@ public class FacebookValueContainerBuilder {
                     ValueContainer valueContainer = (ValueContainer) values.get(i);
                     ShareOpenGraphObject.Builder objectBuilder = new ShareOpenGraphObject.Builder();
                     addValuesToBuilder(valueContainer, objectBuilder);
-                    builder.putObject(key, objectBuilder.build());
+                    ShareOpenGraphObject object = objectBuilder.build();
+                    builder.putObject(key, object);
                 }
                 break;
                 case OBJECT_ARRAY:
                 {
                     ArrayList<ShareOpenGraphObject> newList = new ArrayList<>();
                     List<ValueContainer> list = (List<ValueContainer>) values.get(i);
-                    for(int j = 0; j<list.size(); j++){
-                        ValueContainer valueContainer = list.get(j);
+                    for (ValueContainer valueContainer : list) {
                         ShareOpenGraphObject.Builder objectBuilder = new ShareOpenGraphObject.Builder();
                         addValuesToBuilder(valueContainer, objectBuilder);
-                        newList.add(objectBuilder.build());
+                        ShareOpenGraphObject object = objectBuilder.build();
+                        newList.add(object);
                     }
                     builder.putObjectArrayList(key, newList);
                 }
                 break;
                 default:
-                    continue;
             }
         }
     }

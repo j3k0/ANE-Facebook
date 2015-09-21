@@ -4,10 +4,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import com.adobe.fre.FREArray;
 import com.adobe.fre.FREObject;
-import com.facebook.share.model.ShareContent;
-import com.facebook.share.model.ShareLinkContent;
-import com.facebook.share.model.ShareOpenGraphContent;
-import com.facebook.share.model.ShareOpenGraphValueContainer;
+import com.facebook.share.model.*;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 
 import java.util.ArrayList;
@@ -15,12 +12,12 @@ import java.util.List;
 
 public class FacebookObjectsConversionUtil {
 
-    public static void parseShareContent(FREObject object, ShareContent.Builder builder)
+    protected static void parseShareContent(FREObject object, ShareContent.Builder builder)
     {
-        String contentUrl = getStringProperty(object, "contentUrl");
-        List<String> peopleIds = getStringListProperty(object, "peopleIds");
-        String placeId = getStringProperty(object, "placeId");
-        String ref = getStringProperty(object, "ref");
+        String contentUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("contentUrl", object));
+        List<String> peopleIds = FREConversionUtil.toStringArray(FREConversionUtil.getProperty("peopleIds", object));
+        String placeId = FREConversionUtil.toString(FREConversionUtil.getProperty("placeId", object));
+        String ref = FREConversionUtil.toString(FREConversionUtil.getProperty("ref", object));
 
         if(contentUrl != null) builder.setContentUrl(Uri.parse(contentUrl));
         if(peopleIds != null) builder.setPeopleIds(peopleIds);
@@ -32,10 +29,10 @@ public class FacebookObjectsConversionUtil {
     {
         FacebookObjectsConversionUtil.parseShareContent(object, builder);
 
-        String previewPropertyName = getStringProperty(object, "previewPropertyName");
+        String previewPropertyName = FREConversionUtil.toString(FREConversionUtil.getProperty("previewPropertyName", object));
         ValueContainer valueContainer = ValueContainer.getValueContainer(FREConversionUtil.getProperty("action", object));
 
-        AirFacebookExtension.log("VALUECONTAINER " + valueContainer.toString());
+        AirFacebookExtension.log("VALUECONTAINER " + valueContainer);
 
         if(previewPropertyName != null) builder.setPreviewPropertyName(previewPropertyName);
         if(valueContainer != null) builder.setAction(FacebookValueContainerBuilder.toOpenGraphAction(valueContainer));
@@ -45,58 +42,121 @@ public class FacebookObjectsConversionUtil {
     {
         FacebookObjectsConversionUtil.parseShareContent(object, builder);
 
-        String contentTitle = getStringProperty(object, "contentTitle");
-        String contentDescription = getStringProperty(object, "contentDescription");
-        String imageUrl = getStringProperty(object, "imageUrl");
+        String contentTitle = FREConversionUtil.toString(FREConversionUtil.getProperty("contentTitle", object));
+        String contentDescription = FREConversionUtil.toString(FREConversionUtil.getProperty("contentDescription", object));
+        String imageUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("imageUrl", object));
 
         if(contentTitle != null) builder.setContentTitle(contentTitle);
         if(contentDescription != null) builder.setContentDescription(contentDescription);
         if(imageUrl != null) builder.setImageUrl(Uri.parse(imageUrl));
     }
 
-    protected static String getStringProperty(FREObject object, String property)
+    public static String toString(ShareLinkContent content)
     {
-        FREObject propertyObject = FREConversionUtil.getProperty(property, object);
-        if(propertyObject == null){
-            return null;
-        }
-        return FREConversionUtil.toString(propertyObject);
+        StringBuilder builder = new StringBuilder();
+        builder.append("[ShareLinkContent ");
+        builder.append("contentDescription:'").append(content.getContentDescription()).append("' ");
+        builder.append("contentTitle:'").append(content.getContentTitle()).append("' ");
+        builder.append("imageUrl:'").append(content.getImageUrl()).append("' ");
+        builder.append("contentUrl:'").append(content.getContentUrl()).append("' ");
+        builder.append("peopleIds:'").append(content.getPeopleIds()).append("' ");
+        builder.append("placeId:'").append(content.getPlaceId()).append("' ");
+        builder.append("ref:'").append(content.getRef()).append("']");
+        return builder.toString();
     }
 
-    protected static List<String> getStringListProperty(FREObject object, String property)
+    public static void parseAppInviteContent(FREObject object, AppInviteContent.Builder builder)
     {
-        try
-        {
-            FREArray propertyArray = (FREArray)object.getProperty(property);
-            if(propertyArray == null){
-                return null;
-            }
-            return getListOfStringFromFREArray(propertyArray);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
+        String appLinkUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("appLinkUrl", object));
+        String previewImageUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("previewImageUrl", object));
+
+        if(appLinkUrl != null) builder.setApplinkUrl(appLinkUrl);
+        if(previewImageUrl != null) builder.setPreviewImageUrl(previewImageUrl);
     }
 
-    protected static List<String> getListOfStringFromFREArray(FREArray array)
+    public static String toString(AppInviteContent content)
     {
-        List<String> result = new ArrayList<String>();
+        StringBuilder builder = new StringBuilder();
+        builder.append("[AppInviteContent ");
+        builder.append("appLinkUrl:'").append(content.getApplinkUrl()).append("' ");
+        builder.append("previewImageUrl:'").append(content.getPreviewImageUrl()).append("']");
+        return builder.toString();
+    }
 
-        try
-        {
-            for (int i = 0; i < array.getLength(); i++)
-            {
-                result.add(FREConversionUtil.toString(array.getObjectAt((long) i)));
+    public static void parseGameRequestContent(FREObject object, GameRequestContent.Builder builder)
+    {
+        String message = FREConversionUtil.toString(FREConversionUtil.getProperty("message", object));
+        List<String> to = FREConversionUtil.toStringArray(FREConversionUtil.getProperty("to", object));
+        String data = FREConversionUtil.toString(FREConversionUtil.getProperty("data", object));
+        String title = FREConversionUtil.toString(FREConversionUtil.getProperty("title", object));
+
+        GameRequestContent.ActionType actionType = null;
+        FREObject actionTypeObject = FREConversionUtil.getProperty("actionType", object);
+        if(actionTypeObject != null) {
+
+            Integer actionTypeInt = FREConversionUtil.toInt(FREConversionUtil.getProperty("value", actionTypeObject));
+            if(actionTypeInt != null) {
+                switch (actionTypeInt) {
+                    case 1:
+                        actionType = GameRequestContent.ActionType.SEND;
+                        break;
+                    case 2:
+                        actionType = GameRequestContent.ActionType.ASKFOR;
+                        break;
+                    case 3:
+                        actionType = GameRequestContent.ActionType.TURN;
+                        break;
+                    default:
+                        actionType = null;
+                }
             }
         }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
+
+        String objectId = FREConversionUtil.toString(FREConversionUtil.getProperty("objectId", object));
+
+        GameRequestContent.Filters filters = null;
+        FREObject filtersObject = FREConversionUtil.getProperty("filters", object);
+        if(filtersObject != null) {
+
+            Integer filtersObjectInt = FREConversionUtil.toInt(FREConversionUtil.getProperty("value", filtersObject));
+            if(filtersObjectInt != null) {
+                switch (filtersObjectInt) {
+                    case 1:
+                        filters = GameRequestContent.Filters.APP_USERS;
+                        break;
+                    case 2:
+                        filters = GameRequestContent.Filters.APP_NON_USERS;
+                        break;
+                    default:
+                        actionType = null;
+                }
+            }
         }
 
-        return result;
+        List<String> suggestions = FREConversionUtil.toStringArray(FREConversionUtil.getProperty("suggestions", object));
+
+        if(message != null) builder.setMessage(message);
+        if(to != null) builder.setRecipients(to);
+        if(data != null) builder.setData(data);
+        if(title != null) builder.setTitle(title);
+        if(actionType != null) builder.setActionType(actionType);
+        if(objectId != null) builder.setObjectId(objectId);
+        if(filters != null) builder.setFilters(filters);
+        if(suggestions != null) builder.setSuggestions(suggestions);
+    }
+
+    public static String toString(GameRequestContent content)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[GameRequestContent ");
+        builder.append("message:'").append(content.getMessage()).append("' ");
+        builder.append("recipients:'").append(content.getRecipients()).append("' ");
+        builder.append("data:'").append(content.getData()).append("' ");
+        builder.append("title:'").append(content.getTitle()).append("' ");
+        builder.append("actionType:'").append(content.getActionType()).append("' ");
+        builder.append("objectId:'").append(content.getObjectId()).append("' ");
+        builder.append("filters:'").append(content.getFilters()).append("' ");
+        builder.append("suggestions:'").append(content.getSuggestions()).append("']");
+        return builder.toString();
     }
 }

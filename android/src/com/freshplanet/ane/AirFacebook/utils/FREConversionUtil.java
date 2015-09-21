@@ -5,6 +5,7 @@ import com.adobe.fre.*;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -118,6 +119,19 @@ public class FREConversionUtil {
         try
         {
             return object.getAsDouble();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Long toLong(FREObject object){
+        try
+        {
+            Double doubleValue = object.getAsDouble();
+            return doubleValue.longValue();
         }
         catch (Exception e)
         {
@@ -277,38 +291,38 @@ public class FREConversionUtil {
         return result;
     }
 
-    public static <T> List<T> toList(Class<T> type, FREArray array){
-        List<T> result = new ArrayList<>();
-
-        try
-        {
-            for (Integer i = 0; i < array.getLength(); i++)
-            {
-                FREObject object = array.getObjectAt(i);
-
-                if(String.class.isAssignableFrom(type)){
-                    result.add((T)object.getAsString());
-                }else if(Integer.class.isAssignableFrom(type)){
-                    result.add((T)(Integer)object.getAsInt());
-                }else if(Boolean.class.isAssignableFrom(type)){
-                    result.add((T)(Boolean)object.getAsBool());
-                }else if(Double.class.isAssignableFrom(type)){
-                    result.add((T)(Double)object.getAsDouble());
-                }else if(Long.class.isAssignableFrom(type)){
-                    result.add((T)(Long)((Double)object.getAsDouble()).longValue());
-                }else{
-                    return null;
-                }
-            }
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            return null;
-        }
-
-        return result;
-    }
+//    public static <T> List<T> toList(Class<T> type, FREArray array){
+//        List<T> result = new ArrayList<>();
+//
+//        try
+//        {
+//            for (Integer i = 0; i < array.getLength(); i++)
+//            {
+//                FREObject object = array.getObjectAt(i);
+//
+//                if(String.class.isAssignableFrom(type)){
+//                    result.add((T)object.getAsString());
+//                }else if(Integer.class.isAssignableFrom(type)){
+//                    result.add((T)(Integer)object.getAsInt());
+//                }else if(Boolean.class.isAssignableFrom(type)){
+//                    result.add((T)(Boolean)object.getAsBool());
+//                }else if(Double.class.isAssignableFrom(type)){
+//                    result.add((T)(Double)object.getAsDouble());
+//                }else if(Long.class.isAssignableFrom(type)){
+//                    result.add((T)(Long)((Double)object.getAsDouble()).longValue());
+//                }else{
+//                    return null;
+//                }
+//            }
+//        }
+//        catch (Exception e)
+//        {
+//            e.printStackTrace();
+//            return null;
+//        }
+//
+//        return result;
+//    }
 
     public static List<Integer> toIntegerArray(FREArray array){
         List<Integer> result = new ArrayList<>();
@@ -371,7 +385,7 @@ public class FREConversionUtil {
             {
                 try
                 {
-                    result.add(FREConversionUtil.toNumber(array.getObjectAt(i)).doubleValue());
+                    result.add(FREConversionUtil.toDouble(array.getObjectAt(i)));
                 }
                 catch (Exception e)
                 {
@@ -397,7 +411,7 @@ public class FREConversionUtil {
             {
                 try
                 {
-                    result.add(FREConversionUtil.toNumber(array.getObjectAt(i)).longValue());
+                    result.add(FREConversionUtil.toLong(array.getObjectAt(i)));
                 }
                 catch (Exception e)
                 {
