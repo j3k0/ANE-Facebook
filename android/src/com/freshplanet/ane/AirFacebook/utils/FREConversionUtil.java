@@ -106,6 +106,10 @@ public class FREConversionUtil {
     public static String toString(FREObject object){
         try
         {
+            if(object == null){
+
+                return null;
+            }
             return object.getAsString();
         }
         catch (Exception e)
@@ -118,6 +122,10 @@ public class FREConversionUtil {
     public static Double toDouble(FREObject object){
         try
         {
+            if(object == null){
+
+                return null;
+            }
             return object.getAsDouble();
         }
         catch (Exception e)
@@ -130,6 +138,10 @@ public class FREConversionUtil {
     public static Long toLong(FREObject object){
         try
         {
+            if(object == null){
+
+                return null;
+            }
             Double doubleValue = object.getAsDouble();
             return doubleValue.longValue();
         }
@@ -143,6 +155,10 @@ public class FREConversionUtil {
     public static Integer toInt(FREObject object){
         try
         {
+            if(object == null){
+
+                return null;
+            }
             return object.getAsInt();
         }
         catch (Exception e)
@@ -155,6 +171,10 @@ public class FREConversionUtil {
     public static Boolean toBoolean(FREObject object){
         try
         {
+            if(object == null){
+
+                return null;
+            }
             return object.getAsBool();
         }
         catch (Exception e)
@@ -169,6 +189,10 @@ public class FREConversionUtil {
 
         try
         {
+            if(object == null){
+
+                return null;
+            }
             FREArray array = (FREArray)object;
 
             for (Integer i = 0; i < array.getLength(); i++)
@@ -196,6 +220,10 @@ public class FREConversionUtil {
     {
         try
         {
+            if(object == null){
+
+                return null;
+            }
             FREArray keys = (FREArray) object.getProperty("keys");
             FREArray values = (FREArray) object.getProperty("values");
             return toStringBundle(keys, values);
@@ -239,6 +267,10 @@ public class FREConversionUtil {
     {
         try
         {
+            if(object == null){
+
+                return null;
+            }
             FREArray keys = (FREArray) object.getProperty("keys");
             FREArray types = (FREArray) object.getProperty("types");
             FREArray values = (FREArray) object.getProperty("values");
@@ -324,11 +356,17 @@ public class FREConversionUtil {
 //        return result;
 //    }
 
-    public static List<Integer> toIntegerArray(FREArray array){
+    public static List<Integer> toIntegerArray(FREObject object){
         List<Integer> result = new ArrayList<>();
 
         try
         {
+            if(object == null){
+
+                return null;
+            }
+            FREArray array = (FREArray)object;
+
             for (Integer i = 0; i < array.getLength(); i++)
             {
                 try
@@ -350,11 +388,17 @@ public class FREConversionUtil {
         return result;
     }
 
-    public static List<Boolean> toBoolArray(FREArray array){
+    public static List<Boolean> toBoolArray(FREObject object){
         List<Boolean> result = new ArrayList<>();
 
         try
         {
+            if(object == null){
+
+                return null;
+            }
+            FREArray array = (FREArray)object;
+
             for (Integer i = 0; i < array.getLength(); i++)
             {
                 try
@@ -376,11 +420,17 @@ public class FREConversionUtil {
         return result;
     }
 
-    public static List<Double> toDoubleArray(FREArray array){
+    public static List<Double> toDoubleArray(FREObject object){
         List<Double> result = new ArrayList<>();
 
         try
         {
+            if(object == null){
+
+                return null;
+            }
+            FREArray array = (FREArray)object;
+
             for (Integer i = 0; i < array.getLength(); i++)
             {
                 try
@@ -402,11 +452,17 @@ public class FREConversionUtil {
         return result;
     }
 
-    public static List<Long> toLongArray(FREArray array){
+    public static List<Long> toLongArray(FREObject object){
         List<Long> result = new ArrayList<>();
 
         try
         {
+            if(object == null){
+
+                return null;
+            }
+            FREArray array = (FREArray)object;
+
             for (Integer i = 0; i < array.getLength(); i++)
             {
                 try
@@ -431,6 +487,11 @@ public class FREConversionUtil {
     public static FREObject getProperty(String name, FREObject object){
         try
         {
+            if(object == null){
+
+                return null;
+            }
+
             return object.getProperty(name);
         }
         catch (Exception e)
@@ -443,6 +504,11 @@ public class FREConversionUtil {
     public static Long getArrayLength(FREArray array){
         try
         {
+            if(array == null){
+
+                return null;
+            }
+
             return array.getLength();
         }
         catch (Exception e)
@@ -455,6 +521,11 @@ public class FREConversionUtil {
     public static FREObject getArrayItemAt(Long index, FREArray array){
         try
         {
+            if(array == null){
+
+                return null;
+            }
+
             return array.getObjectAt(index);
         }
         catch (Exception e)

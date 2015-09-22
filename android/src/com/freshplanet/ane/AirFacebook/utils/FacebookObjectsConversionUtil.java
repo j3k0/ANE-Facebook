@@ -2,6 +2,7 @@ package com.freshplanet.ane.AirFacebook.utils;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcel;
 import com.adobe.fre.FREArray;
 import com.adobe.fre.FREObject;
 import com.facebook.share.model.*;
@@ -35,7 +36,44 @@ public class FacebookObjectsConversionUtil {
         AirFacebookExtension.log("VALUECONTAINER " + valueContainer);
 
         if(previewPropertyName != null) builder.setPreviewPropertyName(previewPropertyName);
-        if(valueContainer != null) builder.setAction(FacebookValueContainerBuilder.toOpenGraphAction(valueContainer));
+        ShareOpenGraphAction shareOpenGraphAction = FacebookValueContainerBuilder.toOpenGraphAction(valueContainer);
+        if(valueContainer != null) builder.setAction(shareOpenGraphAction);
+    }
+
+    public static String toString(ShareOpenGraphContent content)
+    {
+        StringBuilder builder = new StringBuilder();
+        builder.append("[ShareOpenGraphContent ");
+        builder.append("previewPropertyName:'").append(content.getPreviewPropertyName()).append("' ");
+
+        builder.append("action:'");
+        ShareOpenGraphAction action = content.getAction();
+        if(action == null){
+            builder.append("null");
+        }else{
+            builder.append("[ShareOpenGraphAction ");
+            builder.append("actionType:'").append(action.getActionType()).append("' ");
+            builder.append("*bundle:'").append(action.getBundle()).append("' ");
+
+            ShareOpenGraphObject object = action.getObject(content.getPreviewPropertyName());
+            if(object != null){
+                builder.append("*object:'").append(object.getBundle()).append("' ");
+            }
+            ArrayList<ShareOpenGraphObject> objects = action.getObjectArrayList(content.getPreviewPropertyName());
+            if(objects != null){
+                for (ShareOpenGraphObject obj : objects) {
+                    builder.append("*objects:'").append(obj.getBundle()).append("' ");
+                }
+            }
+            builder.append("]");
+        }
+        builder.append("' ");
+
+        builder.append("contentUrl:'").append(content.getContentUrl()).append("' ");
+        builder.append("peopleIds:'").append(content.getPeopleIds()).append("' ");
+        builder.append("placeId:'").append(content.getPlaceId()).append("' ");
+        builder.append("ref:'").append(content.getRef()).append("']");
+        return builder.toString();
     }
 
     public static void parseShareLinkContent(FREObject object, ShareLinkContent.Builder builder)

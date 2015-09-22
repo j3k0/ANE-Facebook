@@ -114,7 +114,7 @@ public class ValueContainer {
     }
 
     private void addValue(String key, ConversionType type, FREObject valueObject) throws FREInvalidObjectException, FRETypeMismatchException, FREWrongThreadException {
-        AirFacebookExtension.log("addValue " + key + " " + type);
+//        AirFacebookExtension.log("addValue " + key + " " + type);
 
         Object value;
         switch (type){

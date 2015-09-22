@@ -3,6 +3,7 @@ package com.freshplanet.ane.AirFacebook.utils;
 import com.facebook.share.model.ShareOpenGraphAction;
 import com.facebook.share.model.ShareOpenGraphObject;
 import com.facebook.share.model.ShareOpenGraphValueContainer;
+import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ public class FacebookValueContainerBuilder {
 
             String key = keys.get(i);
             ConversionType conversionType = types.get(i);
+//            AirFacebookExtension.log("addValuesToBuilder key:" + key + " conversionType:" + conversionType);
             switch (conversionType){
                 case STRING:
                     builder.putString(key, (String)values.get(i));

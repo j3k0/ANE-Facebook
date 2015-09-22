@@ -8,7 +8,8 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.share.ShareApi;
 import com.facebook.share.Sharer;
-import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.model.ShareContent;
+import com.facebook.share.model.ShareOpenGraphContent;
 import com.facebook.share.widget.ShareDialog;
 
 public class ShareDialogActivity extends Activity implements FacebookCallback<Sharer.Result>
@@ -20,7 +21,7 @@ public class ShareDialogActivity extends Activity implements FacebookCallback<Sh
 
 	private String callback;
 	private Boolean useShareApi;
-	private ShareLinkContent shareLinkContent;
+	private ShareContent shareContent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
@@ -31,21 +32,21 @@ public class ShareDialogActivity extends Activity implements FacebookCallback<Sh
 
 		callback = this.getIntent().getStringExtra(extraPrefix + ".callback");
 		useShareApi = this.getIntent().getBooleanExtra(extraPrefix + ".useShareApi", false);
-		shareLinkContent = this.getIntent().getParcelableExtra(extraPrefix + ".content");
+		shareContent = this.getIntent().getParcelableExtra(extraPrefix + ".content");
 
 		callbackManager = CallbackManager.Factory.create();
 
 		if(useShareApi){
 
-			ShareApi.share(shareLinkContent, this);
+			ShareApi.share(shareContent, this);
 		} else {
 
 			shareDialog = new ShareDialog(this);
 			shareDialog.registerCallback(callbackManager, this);
 
-			if (shareDialog.canShow(shareLinkContent, AirFacebookExtension.context.getDefaultShareDialogMode())) {
+			if (shareDialog.canShow(shareContent, AirFacebookExtension.context.getDefaultShareDialogMode())) {
 
-				shareDialog.show(shareLinkContent, AirFacebookExtension.context.getDefaultShareDialogMode());
+				shareDialog.show(shareContent, AirFacebookExtension.context.getDefaultShareDialogMode());
 			} else {
 
 				AirFacebookExtension.log("ERROR - CANNOT SHARE!");

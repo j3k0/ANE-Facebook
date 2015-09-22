@@ -435,9 +435,9 @@ public class Facebook extends EventDispatcher {
         }
     }
 
-    public function shareOpenGraph(content:FBShareOpenGraphContent):void
+    public function shareOpenGraph(content:FBShareOpenGraphContent, useShareApi:Boolean, callback:Function = null):void
     {
-        _context.call("shareOpenGraph", content);
+        _context.call("shareOpenGraph", content, useShareApi, getNewCallbackName(callback));
     }
 
     // --------------------------------------------------------------------------------------//
