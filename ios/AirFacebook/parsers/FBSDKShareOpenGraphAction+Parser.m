@@ -8,6 +8,7 @@
 
 #import "FBSDKShareOpenGraphAction+Parser.h"
 #import "FREConversionUtil.h"
+#import "FBSDKShareOpenGraphObject+Parser.h";
 
 @implementation FBSDKShareOpenGraphAction (Parser)
 
@@ -46,11 +47,17 @@
 {
     NSString *properties = @"[";
     for(NSString *aKey in [self keyEnumerator]) {
-        properties = [properties stringByAppendingFormat:@"%@:'%@' ", aKey, [self valueForKey:aKey]];
+        id value = [self valueForKey:aKey];
+        if([value isKindOfClass:[FBSDKShareOpenGraphObject class]]){
+            FBSDKShareOpenGraphObject *object = (FBSDKShareOpenGraphObject *)value;
+            properties = [properties stringByAppendingFormat:@"%@:'%@' ", aKey, [object toString]];
+        } else {
+            properties = [properties stringByAppendingFormat:@"%@:'%@' ", aKey, value];
+        }
     }
     properties = [properties stringByAppendingString:@"]"];
     
-    NSString *result = [[NSString alloc] initWithFormat:@"[FBSDKShareOpenGraphContent actionType:'%@' properties:'%@']",
+    NSString *result = [[NSString alloc] initWithFormat:@"[FBSDKShareOpenGraphAction actionType:'%@' *properties:'%@']",
                         self.actionType,
                         properties
                         ];
