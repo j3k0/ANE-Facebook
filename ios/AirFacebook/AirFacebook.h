@@ -32,7 +32,7 @@ typedef void (^FBOpenSessionCompletionHandler)(FBSDKLoginManagerLoginResult *res
 + (NSString*) jsonStringFromObject:(id)obj andPrettyPrint:(BOOL) prettyPrint;
 
 - (void)shareFinishedForCallback:(NSString *)callback;
-- (void)shareContent:(FBSDKShareLinkContent *)content usingShareApi:(BOOL)useShareApi andCallback:(NSString *)callback;
+- (void)shareContent:(id<FBSDKSharingContent>)content usingShareApi:(BOOL)useShareApi andCallback:(NSString *)callback;
 
 + (FBOpenSessionCompletionHandler)openSessionCompletionHandler;
 + (void)nativeLog:(NSString *)message withPrefix:(NSString *)prefix;
@@ -46,4 +46,3 @@ typedef void (^FBOpenSessionCompletionHandler)(FBSDKLoginManagerLoginResult *res
 @property (nonatomic) FREContext context;
 
 @end
-

@@ -44,6 +44,7 @@ void AirFacebookContextInitializer(void* extData, const uint8_t* ctxType, FRECon
                                 @"shareLinkDialog":                 [NSValue valueWithPointer:&shareLinkDialog],
                                 @"appInviteDialog":                 [NSValue valueWithPointer:&appInviteDialog],
                                 @"gameRequestDialog":               [NSValue valueWithPointer:&gameRequestDialog],
+                                @"shareOpenGraph":                  [NSValue valueWithPointer:&shareOpenGraph],
                                 
                                 // FB events
                                 @"activateApp":                     [NSValue valueWithPointer:&activateApp],

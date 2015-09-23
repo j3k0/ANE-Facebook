@@ -23,7 +23,7 @@
     return self;
 }
 
--(BOOL)shareContent:(FBSDKShareLinkContent *)content usingShareApi:(BOOL)useShareApi
+-(BOOL)shareContent:(id<FBSDKSharingContent>)content usingShareApi:(BOOL)useShareApi
 {
     if(useShareApi){
         

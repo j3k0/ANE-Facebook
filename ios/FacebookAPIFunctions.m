@@ -25,6 +25,7 @@
 #import "FBSDKProfile+Serializer.h"
 #import "FBSDKShareLinkContent+Parser.h"
 #import "FBSDKAppInviteContent+Parser.h"
+#import "FBSDKShareOpenGraphContent+Parser.h"
 
 DEFINE_ANE_FUNCTION(logInWithPermissions)
 {
@@ -268,3 +269,17 @@ DEFINE_ANE_FUNCTION(logEvent)
     [FBSDKAppEvents logEvent:eventName valueToSum:[valueToSum doubleValue] parameters:parameters];
     return nil;
 }
+
+DEFINE_ANE_FUNCTION(shareOpenGraph)
+{
+    FBSDKShareOpenGraphContent *content = [FBSDKShareOpenGraphContent parseFromFREObject:argv[0]];
+    BOOL useShareApi = [FREConversionUtil toBoolean:argv[1]];
+    NSString *callback = [FREConversionUtil toString:argv[2]];
+    
+    [AirFacebook log:@"shareOpenGraph content:%@ useShareApi:%@ callback:%@", [content toString], (useShareApi ? @"TRUE" : @"FALSE"), callback];
+    
+    [[AirFacebook sharedInstance] shareContent:content usingShareApi:useShareApi andCallback:callback];
+    
+    return nil;
+}
+

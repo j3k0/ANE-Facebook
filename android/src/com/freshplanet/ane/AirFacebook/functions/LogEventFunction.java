@@ -3,6 +3,7 @@ package com.freshplanet.ane.AirFacebook.functions;
 import android.os.Bundle;
 import com.adobe.fre.*;
 import com.facebook.appevents.AppEventsLogger;
+import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
 
 public class LogEventFunction implements FREFunction
@@ -13,6 +14,9 @@ public class LogEventFunction implements FREFunction
 		String eventName = FREConversionUtil.toString(FREConversionUtil.getProperty("eventName", args[0]));
 		Double valueToSum = FREConversionUtil.toDouble(FREConversionUtil.getProperty("valueToSum", args[0]));
 		Bundle parameters = FREConversionUtil.toBundle(args[0]);
+
+		AirFacebookExtension.log("LogEventFunction eventName:" + eventName + " valueToSum:" + valueToSum
+				+ " parameters:" + parameters);
 
 		AppEventsLogger logger = AppEventsLogger.newLogger(context.getActivity().getApplicationContext());
 		if (valueToSum == null) {

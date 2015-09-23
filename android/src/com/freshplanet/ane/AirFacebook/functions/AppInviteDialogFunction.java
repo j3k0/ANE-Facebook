@@ -8,22 +8,19 @@ import com.facebook.share.model.AppInviteContent;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 import com.freshplanet.ane.AirFacebook.AppInviteActivity;
 import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
+import com.freshplanet.ane.AirFacebook.utils.FacebookObjectsConversionUtil;
 
 public class AppInviteDialogFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		// Retrieve callback
-		String appLinkUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("appLinkUrl", args[0]));
-		String previewImageUrl = FREConversionUtil.toString(FREConversionUtil.getProperty("previewImageUrl", args[0]));
+		AppInviteContent.Builder builder = new AppInviteContent.Builder();
+		FacebookObjectsConversionUtil.parseAppInviteContent(args[0], builder);
+		AppInviteContent content = builder.build();
 		String callback = FREConversionUtil.toString(args[1]);
 
-		AirFacebookExtension.log("AppInviteDialogFunction appLinkUrl:" + appLinkUrl + " previewImageUrl:" + previewImageUrl);
-
-		AppInviteContent.Builder builder = new AppInviteContent.Builder();
-		if(appLinkUrl != null) builder.setApplinkUrl(appLinkUrl);
-		if(previewImageUrl != null) builder.setPreviewImageUrl(previewImageUrl);
-		AppInviteContent content = builder.build();
+		AirFacebookExtension.log("AppInviteDialogFunction content:" + FacebookObjectsConversionUtil.toString(content) +
+						" callback:" + callback);
 
 		// Start dialog activity
 		Intent i = new Intent(context.getActivity().getApplicationContext(), AppInviteActivity.class);
