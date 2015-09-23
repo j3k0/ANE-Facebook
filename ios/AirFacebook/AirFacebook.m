@@ -102,7 +102,7 @@ static AirFacebook *sharedInstance = nil;
 
 // sharing
 
-- (void)shareContent:(FBSDKShareLinkContent *)content usingShareApi:(BOOL)useShareApi andCallback:(NSString *)callback
+- (void)shareContent:(id<FBSDKSharingContent>)content usingShareApi:(BOOL)useShareApi andCallback:(NSString *)callback
 {
     [AirFacebook log:@"share:usingShareApi:andShareCallback: callback: %@", callback];
     
