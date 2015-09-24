@@ -17,7 +17,7 @@ import flash.system.Capabilities;
 
 public class Facebook extends EventDispatcher {
 
-    public static const VERSION:String = "4.6.0";
+    public static const VERSION:String = "4.6.1";
 
     private var _initialized:Boolean;
 
