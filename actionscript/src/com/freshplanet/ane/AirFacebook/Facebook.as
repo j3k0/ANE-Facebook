@@ -3,6 +3,7 @@ import com.freshplanet.ane.AirFacebook.appevents.FBEvent;
 import com.freshplanet.ane.AirFacebook.share.FBAppInviteContent;
 import com.freshplanet.ane.AirFacebook.share.FBGameRequestContent;
 import com.freshplanet.ane.AirFacebook.share.FBShareLinkContent;
+import com.freshplanet.ane.AirFacebook.share.FBShareOpenGraphContent;
 
 import flash.desktop.InvokeEventReason;
 
@@ -16,7 +17,7 @@ import flash.system.Capabilities;
 
 public class Facebook extends EventDispatcher {
 
-    public static const VERSION:String = "4.6.0";
+    public static const VERSION:String = "4.6.1";
 
     private var _initialized:Boolean;
 
@@ -432,6 +433,11 @@ public class Facebook extends EventDispatcher {
 
             log("You must call init() before any other method!");
         }
+    }
+
+    public function shareOpenGraph(content:FBShareOpenGraphContent, useShareApi:Boolean, callback:Function = null):void
+    {
+        _context.call("shareOpenGraph", content, useShareApi, getNewCallbackName(callback));
     }
 
     // --------------------------------------------------------------------------------------//

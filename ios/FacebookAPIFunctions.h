@@ -29,6 +29,7 @@ DEFINE_ANE_FUNCTION(canPresentShareDialog);
 DEFINE_ANE_FUNCTION(shareLinkDialog);
 DEFINE_ANE_FUNCTION(appInviteDialog);
 DEFINE_ANE_FUNCTION(gameRequestDialog);
+DEFINE_ANE_FUNCTION(shareOpenGraph);
 
 // FB events
 DEFINE_ANE_FUNCTION(activateApp);

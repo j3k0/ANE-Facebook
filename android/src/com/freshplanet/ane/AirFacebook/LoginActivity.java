@@ -39,7 +39,7 @@ public class LoginActivity extends Activity
 
 		// Get extra values
 		Bundle extras = this.getIntent().getExtras();
-		List<String> permissions = new ArrayList<String>(Arrays.asList(extras.getStringArray(extraPrefix+".permissions")));
+		List<String> permissions = extras.getStringArrayList(extraPrefix+".permissions");
 		String type = extras.getString(extraPrefix+".type");
 
 		callbackManager = CallbackManager.Factory.create();

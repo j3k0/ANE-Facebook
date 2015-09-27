@@ -24,6 +24,17 @@
 + (BOOL)toBoolean:(FREObject)object;
 + (NSArray *)toStringArray:(FREObject)object;
 
++ (NSArray *)toIntArray:(FREObject)object;
++ (NSArray *)toBoolArray:(FREObject)object;
++ (NSArray *)toLongArray:(FREObject)object;
++ (NSArray *)toDoubleArray:(FREObject)object;
++ (NSArray *)toDictionaryArray:(FREObject)object;
+
++ (NSDictionary *)toStringDictionary:(FREObject)object;
++ (NSDictionary *)toStringDictionaryFromKeys:(FREObject)keys andValues:(FREObject)values;
++ (NSDictionary *)toDictionary:(FREObject)object;
++ (NSDictionary *)toDictionaryFromKeys:(FREObject)keys types:(FREObject)types andValues:(FREObject)values;
+
 + (FREObject)getProperty:(NSString *)name fromObject:(FREObject)object;
 + (NSUInteger)getArrayLength:(FREObject *)array;
 + (FREObject *)getArrayItemAt:(NSUInteger)index on:(FREObject)array;

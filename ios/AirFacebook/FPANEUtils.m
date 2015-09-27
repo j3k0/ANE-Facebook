@@ -17,10 +17,14 @@
 //////////////////////////////////////////////////////////////////////////////////////
 
 #import "FPANEUtils.h"
+#import "FREConversionUtil.h"
 
 const int PARAM_TYPE_STRING = 0;
 const int PARAM_TYPE_INT = 1;
 const int PARAM_TYPE_BOOL = 2;
+
+const int PARAM_TYPE_STRING_ARRAY = 5;
+const int PARAM_TYPE_OBJECT = 10;
 
 #pragma mark - Dispatch events
 
@@ -187,7 +191,6 @@ NSDictionary * FPANE_FREObjectsToNSDictionary(FREObject keys, FREObject types, F
     
     return [NSDictionary dictionaryWithDictionary:mutableDictionary];
 }
-
 
 #pragma mark - Obj-C -> FREObject
 

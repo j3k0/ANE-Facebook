@@ -1,16 +1,15 @@
 package com.freshplanet.ane.AirFacebook.functions;
 
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.facebook.Profile;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
 
-public class GetProfileFunction extends BaseFunction {
+public class GetProfileFunction implements FREFunction {
 
     public FREObject call(FREContext context, FREObject[] args)
     {
-        super.call(context, args);
-
         AirFacebookExtension.log("GetProfileFunction");
 
         Profile profile = Profile.getCurrentProfile();

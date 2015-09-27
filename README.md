@@ -7,8 +7,8 @@ This is an [Air native extension](http://www.adobe.com/devnet/air/native-extensi
 Facebook SDK Versions
 ---------
 
-* iOS: 4.5.0
-* Android: 4.5.0
+* iOS: 4.6.0
+* Android: 4.6.0
 
 **IMPORTANT NOTE:** Please use -swf-version=29 and AIR >= 18 when you use this ANE otherwise you can have some issues. 
 

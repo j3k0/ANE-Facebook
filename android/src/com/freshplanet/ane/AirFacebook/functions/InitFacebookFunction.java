@@ -2,18 +2,18 @@ package com.freshplanet.ane.AirFacebook.functions;
 
 import android.os.Bundle;
 import com.adobe.fre.FREContext;
+import com.adobe.fre.FREFunction;
 import com.adobe.fre.FREObject;
 import com.facebook.FacebookSdk;
 import com.freshplanet.ane.AirFacebook.AirFacebookExtension;
+import com.freshplanet.ane.AirFacebook.utils.FREConversionUtil;
 
-public class InitFacebookFunction extends BaseFunction
+public class InitFacebookFunction implements FREFunction
 {
 	public FREObject call(FREContext context, FREObject[] args)
 	{
-		super.call(context, args);
-
-        String appID = getStringFromFREObject(args[0]);
-		final String callback = getStringFromFREObject(args[1]);
+        String appID = FREConversionUtil.toString(args[0]);
+		final String callback = FREConversionUtil.toString(args[1]);
 
 		Bundle metaData = context.getActivity().getApplicationContext().getApplicationInfo().metaData;
 		String appIdFromMetadata = metaData != null ? metaData.getString("com.facebook.sdk.ApplicationId") : null;
