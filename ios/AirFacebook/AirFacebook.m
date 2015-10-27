@@ -168,20 +168,34 @@ static AirFacebook *sharedInstance = nil;
 {
     return ^(FBSDKLoginManagerLoginResult *result, NSError *error) {
         
+        NSDictionary *res;
         if (error) {
-            // Process error
-            [AirFacebook log:@"Login error: (Error details : %@ )", error.description];
-            [[AirFacebook sharedInstance] dispatchEvent:@"OPEN_SESSION_ERROR" withMessage:@"OK"];
+            res = @{
+                    @"result"   : @"error",
+                    @"domain"   : error.domain,
+                    @"code"     : @(error.code),
+                    @"userInfo" : error.userInfo ? error.userInfo : [NSNull null]
+                    };
+
+            [AirFacebook log:@"Login failed! %@", res];
         }
         else if (result.isCancelled) {
-            // Handle cancellations
-            [AirFacebook log:@"Login failed! User cancelled! (Error details : %@ )", error.description];
-            [[AirFacebook sharedInstance] dispatchEvent:@"OPEN_SESSION_CANCEL" withMessage:@"OK"];
+            
+            res = @{
+                    @"result"   : @"cancel"
+                    };
+            
+            [AirFacebook log:@"Login failed! User cancelled!"];
         }
         else {
+            res = @{
+                    @"result"   : @"success"
+                    };
+            
             [AirFacebook log:@"Login success! grantedPermissions: %@ declinedPermissions: %@", result.grantedPermissions, result.declinedPermissions];
-            [[AirFacebook sharedInstance] dispatchEvent:@"OPEN_SESSION_SUCCESS" withMessage:@"OK"];
         }
+        
+        [[AirFacebook sharedInstance] dispatchEvent:@"LOGIN" withMessage:[AirFacebook jsonStringFromObject:res andPrettyPrint:NO]];
     };
 }
 

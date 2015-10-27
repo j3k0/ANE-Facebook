@@ -1,7 +1,5 @@
 package com.freshplanet.ane.AirFacebook;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -15,6 +13,8 @@ import com.facebook.FacebookException;
 
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class LoginActivity extends Activity
 {	
@@ -50,23 +50,46 @@ public class LoginActivity extends Activity
 				new FacebookCallback<LoginResult>() {
 					@Override
 					public void onSuccess(LoginResult loginResult) {
-						AirFacebookExtension.log("OPEN_SESSION_SUCCESS");
-						_context.dispatchStatusEventAsync("OPEN_SESSION_SUCCESS", "OK");
+						String result = null;
+						try {
+							result = new JSONObject().put("result", "success").toString();
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
+						AirFacebookExtension.log("Login success! grantedPermissions:" + loginResult.getRecentlyGrantedPermissions() +
+							" declinedPermissions:" + loginResult.getRecentlyDeniedPermissions());
+
+						_context.dispatchStatusEventAsync("LOGIN", result);
 						finish();
 					}
 
 					@Override
 					public void onCancel() {
-						AirFacebookExtension.log("OPEN_SESSION_CANCEL");
-						_context.dispatchStatusEventAsync("OPEN_SESSION_CANCEL", "OK");
+						String result = null;
+						try {
+							result = new JSONObject().put("result", "cancel").toString();
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
+						AirFacebookExtension.log("Login failed! User cancelled!");
+						_context.dispatchStatusEventAsync("LOGIN", result);
 						finish();
 					}
 
 					@Override
 					public void onError(FacebookException exception) {
-						AirFacebookExtension.log("OPEN_SESSION_ERROR " + exception.toString());
+						String result = null;
+						try {
+							result = new JSONObject().put("result", "error").put("error", exception.toString()).toString();
+						} catch (JSONException e) {
+							e.printStackTrace();
+						}
+
 						exception.printStackTrace();
-						_context.dispatchStatusEventAsync("OPEN_SESSION_ERROR", exception.getMessage());
+						AirFacebookExtension.log("Login failed! error:" + exception.toString());
+						_context.dispatchStatusEventAsync("LOGIN", result);
 						finish();
 					}
 				});

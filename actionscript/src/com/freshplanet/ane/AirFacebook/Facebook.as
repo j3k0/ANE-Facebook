@@ -17,7 +17,7 @@ import flash.system.Capabilities;
 
 public class Facebook extends EventDispatcher {
 
-    public static const VERSION:String = "4.6.1";
+    public static const VERSION:String = "4.6.3";
 
     private var _initialized:Boolean;
 
@@ -525,17 +525,14 @@ public class Facebook extends EventDispatcher {
         var callback:Function;
         var status:String;
 
-        if (event.code.indexOf("SESSION") != -1) // If the event code contains SESSION, it's an open/reauthorize session result
+        if (event.code == "LOGIN")
         {
-            var success:Boolean = (event.code.indexOf("SUCCESS") != -1);
-            var userCancelled:Boolean = (event.code.indexOf("CANCEL") != -1);
-            var error:String = (event.code.indexOf("ERROR") != -1) ? event.level : null;
+            var result:FBLoginResult = FBLoginResult.parserFromJSON(event.level);
 
             callback = _openSessionCallback;
-
             _openSessionCallback = null;
 
-            if (callback != null) callback(success, userCancelled, error);
+            if (callback != null) callback(result);
         }
         else if (event.code == "LOGGING") // Simple log message
         {
