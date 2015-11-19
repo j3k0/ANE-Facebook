@@ -8,7 +8,9 @@
 
 #import "FlashRuntimeExtensions.h"
 
-#define DEFINE_ANE_FUNCTION(fn) FREObject fn(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
+#define PREFIX(fnprefix,fn) fnprefix##_##fn
+#define ANEFACEBOOK(fn) PREFIX(ANEFacebook,fn)
+#define DEFINE_ANE_FUNCTION(fn) FREObject ANEFACEBOOK(fn)(FREContext context, void* functionData, uint32_t argc, FREObject argv[])
 
 // C interface
 DEFINE_ANE_FUNCTION(initFacebook);
