@@ -41,9 +41,9 @@
         <copy todir="temp/ios/FBSDKShareKit.framework" overwrite="true">
             <fileset dir="../ios/frameworks/FBSDKShareKit.framework"/>
         </copy>
-        <copy todir="temp/ios/Bolts.framework" overwrite="true">
+        <!--copy todir="temp/ios/Bolts.framework" overwrite="true">
             <fileset dir="../ios/frameworks/Bolts.framework"/>
-        </copy>
+        </copy-->
         <copy todir="temp/ios/FBAudienceNetwork.framework" overwrite="true">
             <fileset dir="../ios/frameworks/FBAudienceNetwork.framework"/>
         </copy>
