@@ -36,3 +36,6 @@ Thumbs.db
 *.iml
 /out
 /bin
+
+# iOS
+ios/build
