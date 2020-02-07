@@ -74,7 +74,7 @@
         <!-- Copy over the required libs -->
         <copy file="../android/libs/android-support-v4.jar" todir="temp/android/"/>
         <copy file="../android/libs/bolts-android-1.2.0.jar" todir="temp/android/"/>
-        <copy file="${android.sdk}/tools/lib/annotations.jar" todir="temp/android/"/>
+        <copy file="${android.sdk}/tools/lib/annotations-13.0.jar" tofile="temp/android/annotations.jar"/>
 
         <unzip src="../android/build/outputs/aar/android-release.aar" dest="../android/build/aar" overwrite="true"/>
 
