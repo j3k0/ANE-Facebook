@@ -21,7 +21,7 @@
 package com.facebook.share.internal;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.facebook.FacebookException;
 import com.facebook.internal.Utility;
